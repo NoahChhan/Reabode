@@ -1,230 +1,212 @@
-# Reabode Framework
+# Reabode AI Interior Designer 🏠✨
 
-A simple, modern full-stack framework combining React/Next.js frontend with FastAPI backend and Tailwind CSS for styling.
+An AI-powered mobile app that analyzes your room photos and provides personalized furniture and decor recommendations from real retailers like IKEA and Target.
 
 ## 🚀 Features
 
-- **Frontend**: Next.js 14 with TypeScript and Tailwind CSS
-- **Backend**: FastAPI with Python 3.8+
-- **Styling**: Tailwind CSS with custom components
-- **API**: RESTful API with automatic documentation
-- **Development**: Hot reload for both frontend and backend
-- **Type Safety**: Full TypeScript support
+- **AI Room Analysis**: Upload room photos and get instant style analysis
+- **Smart Recommendations**: Get personalized product suggestions based on your space
+- **Real Product Links**: Direct links to IKEA, Target, and other retailers
+- **Mood Board Creation**: Visualize your design ideas
+- **Real-time Collaboration**: Work with friends and family on designs
+- **Mobile-First**: Built with React Native for iOS and Android
 
-## 📁 Project Structure
+## 🛠️ Tech Stack
 
-```
-reabode/
-├── frontend/                 # Next.js React application
-│   ├── src/
-│   │   ├── app/             # Next.js app directory
-│   │   ├── components/      # Reusable React components
-│   │   └── services/         # API service layer
-│   ├── package.json
-│   └── tailwind.config.js
-├── backend/                  # FastAPI Python application
-│   ├── main.py              # FastAPI application
-│   ├── requirements.txt     # Python dependencies
-│   └── package.json         # Development scripts
-├── package.json             # Root package.json for dev scripts
-└── README.md
-```
+### Mobile App (React Native + Expo)
+- **Frontend**: React Native with Expo
+- **Navigation**: React Navigation
+- **UI**: React Native Paper
+- **Camera**: Expo Camera
+- **Real-time**: LiveKit integration
 
-## 🛠️ Prerequisites
+### Backend (FastAPI + Python)
+- **API**: FastAPI with automatic documentation
+- **AI**: Claude API for image analysis
+- **Vector DB**: Chroma for product embeddings
+- **Automation**: Composio for product data
+- **Real-time**: LiveKit for collaboration
 
+## 📱 Mobile App Features
+
+### Core Screens
+- **Home**: Project overview and quick actions
+- **Camera**: Room photo capture and gallery selection
+- **Analysis**: Room dimensions and style preferences
+- **Recommendations**: Product suggestions with filtering
+- **Profile**: Settings and preferences
+
+### Key Components
+- Camera integration with image capture
+- Swipeable product cards
+- Real-time room analysis
+- Product filtering and search
+- Favorites and shopping cart
+
+## 🔧 Development Setup
+
+### Prerequisites
 - Node.js 18+ and npm
 - Python 3.8+
-- pip (Python package manager)
+- Expo CLI: `npm install -g @expo/cli`
+- iOS Simulator (for iOS development)
+- Android Studio (for Android development)
 
-## 🚀 Quick Start
+### Quick Start
 
-### 1. Install Dependencies
+1. **Install Dependencies**
+   ```bash
+   npm run install:all
+   ```
 
-```bash
-# Install all dependencies (frontend, backend, and dev tools)
-npm run install:all
-```
+2. **Start Development Servers**
+   ```bash
+   npm run dev
+   ```
+   This starts both the FastAPI backend (port 8000) and Expo mobile app.
 
-### 2. Development Mode
+3. **Access the App**
+   - **Mobile**: Scan QR code with Expo Go app
+   - **Backend API**: http://localhost:8000
+   - **API Docs**: http://localhost:8000/docs
 
-```bash
-# Start both frontend and backend in development mode
-npm run dev
-```
+### Manual Setup
 
-This will start:
-
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8000
-- API Documentation: http://localhost:8000/docs
-
-### 3. Manual Setup (Alternative)
-
-If you prefer to set up manually:
-
-#### Backend Setup
-
+#### Backend
 ```bash
 cd backend
 pip install -r requirements.txt
 python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-#### Frontend Setup
-
+#### Mobile App
 ```bash
-cd frontend
+cd mobile
 npm install
-npm run dev
+expo start
 ```
 
-## 📚 API Documentation
+## 🎯 Hackathon Implementation Plan
 
-The FastAPI backend automatically generates interactive API documentation:
+### Phase 1: Foundation (Hours 1-4)
+- ✅ Mobile app structure with navigation
+- ✅ Camera integration for room photos
+- ✅ Basic room analysis API
+- ✅ UI components and theme
 
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
+### Phase 2: AI Integration (Hours 5-8)
+- 🔄 Claude API integration for image analysis
+- 🔄 Room analysis with style detection
+- 🔄 Product recommendation engine
+- 🔄 Chroma vector database setup
 
-### Available Endpoints
+### Phase 3: Product Integration (Hours 9-12)
+- ⏳ Target/IKEA API integration via Composio
+- ⏳ Real product data and links
+- ⏳ Product filtering and search
+- ⏳ Shopping cart functionality
 
-- `GET /` - Welcome message
-- `GET /health` - Health check
-- `GET /items` - Get all items
-- `GET /items/{id}` - Get specific item
-- `POST /items` - Create new item
-- `PUT /items/{id}` - Update item
-- `DELETE /items/{id}` - Delete item
+### Phase 4: Advanced Features (Hours 13-18)
+- ⏳ LiveKit real-time collaboration
+- ⏳ Mood board creation
+- ⏳ AR product preview
+- ⏳ Demo preparation and testing
 
-## 🎨 Components
+## 🔌 API Endpoints
 
-The framework includes several reusable components:
+### Core Endpoints
+- `POST /analyze-room` - Analyze room images with AI
+- `POST /recommendations` - Get product recommendations
+- `GET /projects` - List design projects
+- `POST /projects` - Create new project
+- `POST /products/search` - Search products
+- `POST /mood-board` - Create mood board
+- `POST /collaboration/join` - Join collaboration room
 
-### Button Component
+### Mobile-Specific Features
+- Image upload with base64 encoding
+- Real-time analysis progress
+- Product filtering and favorites
+- Offline project storage
 
-```tsx
-import { Button } from "@/components/Button";
+## 🎨 Design System
 
-<Button variant="primary" size="md" onClick={handleClick}>
-  Click me
-</Button>;
-```
+### Colors
+- Primary: Indigo (#6366f1)
+- Secondary: Amber (#f59e0b)
+- Success: Green (#10b981)
+- Error: Red (#ef4444)
+- Background: Light Gray (#f1f5f9)
 
-### Input Component
+### Components
+- **Cards**: Product displays and project overviews
+- **Chips**: Style and color selection
+- **Buttons**: Primary actions and navigation
+- **FABs**: Quick actions and shopping cart
+- **Progress**: Analysis and loading states
 
-```tsx
-import { Input } from "@/components/Input";
+## 📦 Dependencies
 
-<Input
-  label="Name"
-  value={name}
-  onChange={(e) => setName(e.target.value)}
-  required
-/>;
-```
+### Mobile (React Native)
+- Expo SDK 50
+- React Navigation 6
+- React Native Paper
+- Expo Camera
+- Expo Image Picker
+- LiveKit React Native
 
-### Card Component
+### Backend (Python)
+- FastAPI 0.104
+- Claude API (Anthropic)
+- ChromaDB for vector storage
+- Composio for automation
+- LiveKit for real-time features
 
-```tsx
-import { Card } from "@/components/Card";
+## 🚀 Deployment
 
-<Card title="My Card" subtitle="Card description">
-  <p>Card content</p>
-</Card>;
-```
-
-## 🔧 Development Scripts
-
-### Root Level Scripts
-
-- `npm run dev` - Start both frontend and backend
-- `npm run install:all` - Install all dependencies
-- `npm run build` - Build frontend for production
-- `npm run start` - Start production servers
-
-### Frontend Scripts (in frontend/)
-
-- `npm run dev` - Development server
-- `npm run build` - Build for production
-- `npm run start` - Production server
-- `npm run lint` - Run ESLint
-
-### Backend Scripts (in backend/)
-
-- `npm run dev` - Development server with hot reload
-- `npm run start` - Production server
-- `npm run install` - Install Python dependencies
-
-## 🌐 Environment Configuration
-
-### Frontend Environment
-
-Create `frontend/.env.local`:
-
-```env
-NEXT_PUBLIC_API_URL=http://localhost:8000
-```
-
-### Backend Environment
-
-Create `backend/.env`:
-
-```env
-# Add your environment variables here
-```
-
-## 🚀 Production Deployment
-
-### Frontend (Vercel/Netlify)
-
+### Mobile App
 ```bash
-cd frontend
-npm run build
-# Deploy the 'out' directory
+# Build for production
+npm run build:mobile
+
+# Deploy to app stores
+expo build:android
+expo build:ios
 ```
 
-### Backend (Docker/Cloud)
-
+### Backend API
 ```bash
+# Production server
 cd backend
-pip install -r requirements.txt
 uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
-## 🧪 Example Usage
+## 🤝 Team Collaboration
 
-The framework includes a complete Todo application demonstrating:
+### Development Workflow
+1. **Frontend + Backend in Parallel**: Test features immediately
+2. **Visual Feedback**: See AI results in real-time
+3. **Mobile-First**: Camera and touch interactions from day one
+4. **Rapid Iteration**: Quick feedback loops for AI improvements
 
-- CRUD operations
-- API integration
-- Component composition
-- State management
-- Form handling
-- Error handling
-
-## 📦 Adding New Features
-
-### Backend (FastAPI)
-
-1. Add new routes in `backend/main.py`
-2. Create Pydantic models for request/response
-3. Implement business logic
-4. Test with the auto-generated docs
-
-### Frontend (Next.js)
-
-1. Create components in `src/components/`
-2. Add API calls in `src/services/`
-3. Use TypeScript interfaces for type safety
-4. Style with Tailwind CSS classes
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+### Key Advantages
+- **Faster Development**: Visual testing of AI features
+- **Better UX**: Mobile-optimized interactions
+- **Easier Debugging**: See what's happening in real-time
+- **Impressive Demos**: Working mobile app with AI features
 
 ## 📄 License
 
 MIT License - see LICENSE file for details
+
+## 🏆 Hackathon Goals
+
+- **Innovation**: AI-powered interior design recommendations
+- **Technical**: Mobile app with real-time AI analysis
+- **User Experience**: Intuitive camera-based workflow
+- **Integration**: Multiple sponsor APIs (Claude, Composio, Chroma, LiveKit)
+- **Demo**: Live mobile app demonstration
+
+---
+
+**Built with ❤️ for hackathon success!**

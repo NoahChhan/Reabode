@@ -1,27 +1,33 @@
 {
-  "name": "reabode",
+  "name": "reabode-ai-interior-designer",
   "version": "1.0.0",
-  "description": "Reabode - React/Next.js + FastAPI Framework",
+  "description": "AI-powered interior design mobile app with React Native and FastAPI",
   "scripts": {
-    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
-    "dev:frontend": "cd frontend && npm run dev",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:mobile\"",
     "dev:backend": "cd backend && python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000",
-    "install:all": "npm install && cd frontend && npm install && cd ../backend && pip install -r requirements.txt",
-    "build": "cd frontend && npm run build",
-    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
-    "start:frontend": "cd frontend && npm start",
-    "start:backend": "cd backend && python -m uvicorn main:app --host 0.0.0.0 --port 8000"
+    "dev:mobile": "cd mobile && expo start",
+    "install:all": "npm run install:backend && npm run install:mobile",
+    "install:backend": "cd backend && pip install -r requirements.txt",
+    "install:mobile": "cd mobile && npm install",
+    "build:mobile": "cd mobile && expo build:android && expo build:ios",
+    "start:backend": "cd backend && python -m uvicorn main:app --host 0.0.0.0 --port 8000",
+    "test:backend": "cd backend && python -m pytest",
+    "lint:mobile": "cd mobile && npm run lint"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
   },
   "keywords": [
-    "react",
-    "nextjs",
+    "ai",
+    "interior-design",
+    "mobile-app",
+    "react-native",
     "fastapi",
-    "tailwind",
-    "framework"
+    "claude",
+    "chroma",
+    "composio",
+    "livekit"
   ],
-  "author": "",
+  "author": "Reabode Team",
   "license": "MIT"
 }
