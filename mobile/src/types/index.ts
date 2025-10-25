@@ -59,3 +59,4 @@ export interface DesignProject {
   createdAt: number;
   updatedAt: number;
 }
+
