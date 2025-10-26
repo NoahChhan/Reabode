@@ -20,6 +20,7 @@ import * as Haptics from 'expo-haptics';
 import { useNavigation } from '@react-navigation/native';
 import { DesignProject } from '../types';
 import { apiService } from '../services/api';
+import { useErrorOverlay } from '../hooks/useErrorOverlay';
 
 const { width } = Dimensions.get('window');
 
@@ -27,6 +28,7 @@ export default function HomeScreen() {
   const navigation = useNavigation();
   const [projects, setProjects] = useState<DesignProject[]>([]);
   const [loading, setLoading] = useState(true);
+  const { ErrorOverlay } = useErrorOverlay();
 
   useEffect(() => {
     loadProjects();
@@ -156,6 +158,9 @@ export default function HomeScreen() {
         onPress={handleNewProject}
         label="Scan Room"
       />
+      
+      {/* Render the error overlay over this screen */}
+      <ErrorOverlay />
     </View>
   );
 }
@@ -163,7 +168,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f1f5f9',
+    backgroundColor: '#fff8e6',
   },
   header: {
     paddingTop: 60,
@@ -171,11 +176,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   headerTitle: {
-    color: 'white',
+    color: '#5D8658',
     fontWeight: 'bold',
   },
   headerSubtitle: {
-    color: 'white',
+    color: '#5D8658',
     opacity: 0.9,
     marginTop: 4,
   },
@@ -192,6 +197,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     marginBottom: 16,
     fontWeight: '600',
+    color: '#5D8658',
   },
   actionChips: {
     flexDirection: 'row',
@@ -215,11 +221,13 @@ const styles = StyleSheet.create({
   emptyText: {
     textAlign: 'center',
     marginBottom: 8,
+    color: '#5D8658',
   },
   emptySubtext: {
     textAlign: 'center',
     opacity: 0.7,
     marginBottom: 20,
+    color: '#5D8658',
   },
   emptyButton: {
     marginTop: 10,
@@ -237,6 +245,7 @@ const styles = StyleSheet.create({
   projectSubtext: {
     opacity: 0.7,
     marginTop: 4,
+    color: '#5D8658',
   },
   fab: {
     position: 'absolute',

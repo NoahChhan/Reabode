@@ -9,8 +9,11 @@ import {
   Divider,
 } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
 
 export default function ProfileScreen() {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -69,6 +72,12 @@ export default function ProfileScreen() {
               title="Terms of Service"
               onPress={() => {}}
             />
+            
+            <List.Item
+              title="Test Error Handling"
+              description="Test the app's error handling system"
+              onPress={() => navigation.navigate('TestError' as never)}
+            />
           </Card.Content>
         </Card>
 
@@ -87,7 +96,7 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f1f5f9',
+    backgroundColor: '#fff8e6',
   },
   header: {
     paddingTop: 50,
@@ -95,7 +104,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   headerTitle: {
-    color: 'white',
+    color: '#5D8658',
     fontWeight: 'bold',
   },
   content: {
@@ -109,6 +118,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     marginBottom: 16,
     fontWeight: '600',
+    color: '#5D8658',
   },
   logoutButton: {
     marginTop: 30,

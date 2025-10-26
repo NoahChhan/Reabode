@@ -12,6 +12,10 @@ import CameraScreen from './src/screens/CameraScreen';
 import RecommendationsScreen from './src/screens/RecommendationsScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import RoomAnalysisScreen from './src/screens/RoomAnalysisScreen';
+import TestErrorScreen from './src/screens/TestErrorScreen';
+
+// Global error handling - DISABLED
+// import { GlobalErrorBoundary } from './src/components/GlobalErrorBoundary';
 
 // Theme
 import { theme } from './src/theme/theme';
@@ -60,9 +64,10 @@ export default function App() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Main" component={TabNavigator} />
           <Stack.Screen name="RoomAnalysis" component={RoomAnalysisScreen} />
+          <Stack.Screen name="TestError" component={TestErrorScreen} />
         </Stack.Navigator>
+        <StatusBar style="auto" />
       </NavigationContainer>
-      <StatusBar style="auto" />
     </PaperProvider>
   );
 }

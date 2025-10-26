@@ -6,8 +6,9 @@ import {
   ProductRecommendation, 
   DesignProject 
 } from '../types';
+import { Alert } from 'react-native';
 
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:8000';
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://172.20.10.5:8000';
 
 class ApiService {
   private async request<T>(
@@ -24,15 +25,41 @@ class ApiService {
     };
 
     try {
+      console.log(`API Request: ${url}`);
       const response = await fetch(url, config);
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorText = await response.text();
+        console.error(`HTTP ${response.status}: ${errorText}`);
+        
+        // Show user-friendly error based on status code
+        if (response.status === 404) {
+          throw new Error('Service not found. Please check if the backend is running.');
+        } else if (response.status === 500) {
+          throw new Error('Server error. Please try again later.');
+        } else if (response.status === 0) {
+          throw new Error('Cannot connect to server. Please check your internet connection.');
+        } else {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
       }
 
       return await response.json();
     } catch (error) {
       console.error('API request failed:', error);
+      
+      // Only show popup for certain types of errors, not all
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      
+      // Only show alert for connection issues, not for all errors
+      if (errorMessage.includes('Cannot connect') || errorMessage.includes('Service not found')) {
+        Alert.alert(
+          'Connection Error',
+          errorMessage,
+          [{ text: 'OK', style: 'default' }]
+        );
+      }
+      
       throw error;
     }
   }
