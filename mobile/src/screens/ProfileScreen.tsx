@@ -13,14 +13,16 @@ import { LinearGradient } from 'expo-linear-gradient';
 export default function ProfileScreen() {
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors={['#5D8658', '#7FB878']}
-        style={styles.header}
-      >
-        <Text variant="headlineSmall" style={styles.headerTitle}>
-          Profile
-        </Text>
-      </LinearGradient>
+      <View style={styles.headerContainer}>
+        <LinearGradient
+          colors={['#5D8658', '#7FB878']}
+          style={styles.header}
+        >
+          <Text variant="headlineSmall" style={styles.headerTitle}>
+            Profile
+          </Text>
+        </LinearGradient>
+      </View>
 
       <ScrollView style={styles.content}>
         <Card style={styles.card}>
@@ -83,14 +85,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#faf4dc',
   },
-  header: {
+  headerContainer: {
     paddingTop: 50,
+    backgroundColor: '#faf4dc',
+  },
+  header: {
+    paddingTop: 20,
     paddingBottom: 20,
     paddingHorizontal: 20,
   },
   headerTitle: {
     color: 'white',
     fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
   },
   content: {
     flex: 1,

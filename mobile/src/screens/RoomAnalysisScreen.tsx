@@ -394,25 +394,27 @@ export default function RoomAnalysisScreen() {
 
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors={['#5D8658', '#7FB878']}
-        style={styles.header}
-      >
-        <View style={styles.headerContent}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.backButton}>← Back</Text>
-          </TouchableOpacity>
-          <Text variant="titleLarge" style={styles.headerTitle}>
-            Room Analysis
-          </Text>
-          <View style={styles.placeholder} />
-        </View>
-        <ProgressBar
-          progress={(currentStep + 1) / 4}
-          color="white"
-          style={styles.progressBar}
-        />
-      </LinearGradient>
+      <View style={styles.headerContainer}>
+        <LinearGradient
+          colors={['#5D8658', '#7FB878']}
+          style={styles.header}
+        >
+          <View style={styles.headerContent}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Text style={styles.backButton}>← Back</Text>
+            </TouchableOpacity>
+            <Text variant="titleLarge" style={styles.headerTitle}>
+              Room Analysis
+            </Text>
+            <View style={styles.placeholder} />
+          </View>
+          <ProgressBar
+            progress={(currentStep + 1) / 4}
+            color="white"
+            style={styles.progressBar}
+          />
+        </LinearGradient>
+      </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {renderStep()}
@@ -439,8 +441,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#faf4dc',
   },
-  header: {
+  headerContainer: {
     paddingTop: 50,
+    backgroundColor: '#faf4dc',
+  },
+  header: {
+    paddingTop: 20,
     paddingBottom: 20,
     paddingHorizontal: 20,
   },
