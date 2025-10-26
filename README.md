@@ -14,22 +14,84 @@ An AI-powered mobile app that analyzes your room photos and provides personalize
 ## 🛠️ Tech Stack
 
 ### Mobile App (React Native + Expo)
-- **Frontend**: React Native with Expo
-- **Navigation**: React Navigation
-- **UI**: React Native Paper
-- **Camera**: Expo Camera
-- **Real-time**: LiveKit integration
+
+- **Framework**: React Native 0.81.5 with Expo SDK 54
+- **Navigation**: React Navigation 6 (Stack & Bottom Tabs)
+- **UI Components**: React Native Paper 5.11.0
+- **Camera**: Expo Camera 17.0.8 & Expo Image Picker 17.0.8
+- **Gestures**: React Native Gesture Handler & Reanimated
+- **Icons**: React Native Vector Icons 10.0.0
+- **Fonts**: Custom fonts (Poppins, Moonlight) via Expo Font
+- **State Management**: React Hooks & Context API
+- **TypeScript**: Full TypeScript support
+
+### Frontend Web (Next.js)
+
+- **Framework**: Next.js 16.0.0 with React 19.2.0
+- **Styling**: Tailwind CSS 4.0 with PostCSS
+- **TypeScript**: TypeScript 5.x with strict type checking
+- **Linting**: ESLint 9 with Next.js configuration
+- **Build**: Next.js built-in bundling and optimization
 
 ### Backend (FastAPI + Python)
-- **API**: FastAPI with automatic documentation
-- **AI**: Claude API for image analysis
-- **Vector DB**: Chroma for product embeddings
-- **Automation**: Composio for product data
-- **Real-time**: LiveKit for collaboration
+
+- **API Framework**: FastAPI 0.104.1 with automatic OpenAPI docs
+- **Server**: Uvicorn 0.24.0 with ASGI support
+- **AI Services**: Google Gemini AI (google-generativeai 0.3.2)
+- **Image Processing**: Pillow 10.2.0+ for image manipulation
+- **Web Scraping**: Selenium 4.15.2 with WebDriver Manager
+- **Data Validation**: Pydantic 2.8.2 for request/response models
+- **Authentication**: Python-JOSE with cryptography
+- **Security**: Passlib with bcrypt for password hashing
+- **Environment**: Python-dotenv for configuration management
+- **HTTP Client**: Requests 2.31.0 for external API calls
+- **CORS**: FastAPI CORS middleware for cross-origin requests
+
+### Development & Build Tools
+
+- **Package Management**: npm with package-lock.json
+- **Concurrent Development**: concurrently 8.2.2 for parallel dev servers
+- **TypeScript**: TypeScript 5.x across all TypeScript projects
+- **Babel**: Babel preset Expo for React Native compilation
+- **Linting**: ESLint with Next.js and React Native configurations
+
+## 🏗️ Project Architecture
+
+### Multi-Platform Structure
+
+This project consists of three main applications working together:
+
+1. **Mobile App** (`/mobile`) - Primary user interface
+
+   - React Native with Expo for iOS/Android
+   - Camera integration for room photo capture
+   - Real-time AI analysis and product recommendations
+   - Offline-first design with local storage
+
+2. **Web Frontend** (`/frontend`) - Administrative dashboard
+
+   - Next.js with Tailwind CSS for modern web interface
+   - Project management and analytics
+   - Content management for product catalogs
+
+3. **Backend API** (`/backend`) - Core services
+   - FastAPI with automatic API documentation
+   - AI-powered room analysis using Google Gemini
+   - Product scraping and recommendation engine
+   - RESTful API serving both mobile and web clients
+
+### Key Features Implemented
+
+- **Room Blueprint Generation**: Computer vision pipeline for 2D room layouts
+- **AI Room Analysis**: Style detection and furniture identification
+- **Product Recommendations**: IKEA scraping and matching algorithms
+- **Real-time Processing**: Live image analysis and instant feedback
+- **Cross-platform Sync**: Shared API backend for consistent data
 
 ## 📱 Mobile App Features
 
 ### Core Screens
+
 - **Home**: Project overview and quick actions
 - **Camera**: Room photo capture and gallery selection
 - **Analysis**: Room dimensions and style preferences
@@ -37,6 +99,7 @@ An AI-powered mobile app that analyzes your room photos and provides personalize
 - **Profile**: Settings and preferences
 
 ### Key Components
+
 - Camera integration with image capture
 - Swipeable product cards
 - Real-time room analysis
@@ -46,6 +109,7 @@ An AI-powered mobile app that analyzes your room photos and provides personalize
 ## 🔧 Development Setup
 
 ### Prerequisites
+
 - Node.js 18+ and npm
 - Python 3.8+
 - Expo CLI: `npm install -g @expo/cli`
@@ -55,14 +119,17 @@ An AI-powered mobile app that analyzes your room photos and provides personalize
 ### Quick Start
 
 1. **Install Dependencies**
+
    ```bash
    npm run install:all
    ```
 
 2. **Start Development Servers**
+
    ```bash
    npm run dev
    ```
+
    This starts both the FastAPI backend (port 8000) and Expo mobile app.
 
 3. **Access the App**
@@ -73,6 +140,7 @@ An AI-powered mobile app that analyzes your room photos and provides personalize
 ### Manual Setup
 
 #### Backend
+
 ```bash
 cd backend
 pip install -r requirements.txt
@@ -80,6 +148,7 @@ python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 #### Mobile App
+
 ```bash
 cd mobile
 npm install
@@ -89,24 +158,28 @@ expo start
 ## 🎯 Hackathon Implementation Plan
 
 ### Phase 1: Foundation (Hours 1-4)
+
 - ✅ Mobile app structure with navigation
 - ✅ Camera integration for room photos
 - ✅ Basic room analysis API
 - ✅ UI components and theme
 
 ### Phase 2: AI Integration (Hours 5-8)
+
 - 🔄 Claude API integration for image analysis
 - 🔄 Room analysis with style detection
 - 🔄 Product recommendation engine
 - 🔄 Chroma vector database setup
 
 ### Phase 3: Product Integration (Hours 9-12)
+
 - ⏳ Target/IKEA API integration via Composio
 - ⏳ Real product data and links
 - ⏳ Product filtering and search
 - ⏳ Shopping cart functionality
 
 ### Phase 4: Advanced Features (Hours 13-18)
+
 - ⏳ LiveKit real-time collaboration
 - ⏳ Mood board creation
 - ⏳ AR product preview
@@ -115,6 +188,7 @@ expo start
 ## 🔌 API Endpoints
 
 ### Core Endpoints
+
 - `POST /analyze-room` - Analyze room images with AI
 - `POST /recommendations` - Get product recommendations
 - `GET /projects` - List design projects
@@ -124,6 +198,7 @@ expo start
 - `POST /collaboration/join` - Join collaboration room
 
 ### Mobile-Specific Features
+
 - Image upload with base64 encoding
 - Real-time analysis progress
 - Product filtering and favorites
@@ -132,6 +207,7 @@ expo start
 ## 🎨 Design System
 
 ### Colors
+
 - Primary: Indigo (#6366f1)
 - Secondary: Amber (#f59e0b)
 - Success: Green (#10b981)
@@ -139,6 +215,7 @@ expo start
 - Background: Light Gray (#f1f5f9)
 
 ### Components
+
 - **Cards**: Product displays and project overviews
 - **Chips**: Style and color selection
 - **Buttons**: Primary actions and navigation
@@ -148,23 +225,41 @@ expo start
 ## 📦 Dependencies
 
 ### Mobile (React Native)
-- Expo SDK 50
-- React Navigation 6
-- React Native Paper
-- Expo Camera
-- Expo Image Picker
-- LiveKit React Native
+
+- **Core**: Expo SDK 54, React Native 0.81.5, React 19.1.0
+- **Navigation**: React Navigation 6 (Native, Stack, Bottom Tabs)
+- **UI**: React Native Paper 5.11.0, Vector Icons 10.0.0
+- **Camera**: Expo Camera 17.0.8, Expo Image Picker 17.0.8
+- **Gestures**: React Native Gesture Handler 2.28.0, Reanimated 4.1.1
+- **Media**: Expo AV 16.0.7, Expo Linear Gradient 15.0.7
+- **Utilities**: Expo Font 13.0.3, Expo Haptics 15.0.7, Expo Status Bar 3.0.8
+- **Development**: TypeScript 5.1.3, Babel Core 7.20.0
+
+### Frontend Web (Next.js)
+
+- **Core**: Next.js 16.0.0, React 19.2.0, React DOM 19.2.0
+- **Styling**: Tailwind CSS 4.0, PostCSS 4.0
+- **TypeScript**: TypeScript 5.x, Node Types 20, React Types 19
+- **Linting**: ESLint 9, ESLint Config Next 16.0.0
 
 ### Backend (Python)
-- FastAPI 0.104
-- Claude API (Anthropic)
-- ChromaDB for vector storage
-- Composio for automation
-- LiveKit for real-time features
+
+- **API**: FastAPI 0.104.1, Uvicorn 0.24.0, Pydantic 2.8.2
+- **AI**: Google Generative AI 0.3.2 (Gemini)
+- **Image Processing**: Pillow 10.2.0+
+- **Web Scraping**: Selenium 4.15.2, WebDriver Manager 4.0.1
+- **Security**: Python-JOSE 3.3.0, Passlib 1.7.4
+- **Utilities**: Python-dotenv 1.0.0, Requests 2.31.0, Python-multipart 0.0.6
+
+### Development Tools
+
+- **Concurrency**: concurrently 8.2.2 for parallel development
+- **Package Management**: npm with lock files across all projects
 
 ## 🚀 Deployment
 
 ### Mobile App
+
 ```bash
 # Build for production
 npm run build:mobile
@@ -175,6 +270,7 @@ expo build:ios
 ```
 
 ### Backend API
+
 ```bash
 # Production server
 cd backend
@@ -184,12 +280,14 @@ uvicorn main:app --host 0.0.0.0 --port 8000
 ## 🤝 Team Collaboration
 
 ### Development Workflow
+
 1. **Frontend + Backend in Parallel**: Test features immediately
 2. **Visual Feedback**: See AI results in real-time
 3. **Mobile-First**: Camera and touch interactions from day one
 4. **Rapid Iteration**: Quick feedback loops for AI improvements
 
 ### Key Advantages
+
 - **Faster Development**: Visual testing of AI features
 - **Better UX**: Mobile-optimized interactions
 - **Easier Debugging**: See what's happening in real-time
