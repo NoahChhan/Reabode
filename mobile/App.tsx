@@ -1,5 +1,5 @@
-import React from "react";
-import { ActivityIndicator, View, Image } from "react-native";
+import React, { useState, useRef, useEffect } from "react";
+import { ActivityIndicator, View, Image, Animated, Easing } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -7,6 +7,9 @@ import { Provider as PaperProvider } from "react-native-paper";
 import { StatusBar } from "expo-status-bar";
 import { useFonts } from "expo-font";
 import Icon from "react-native-vector-icons/MaterialIcons";
+
+// Components
+import WelcomeScreen from "./src/components/WelcomeScreen";
 
 // Screens
 import HomeScreen from "./src/screens/HomeScreen";
@@ -104,17 +107,83 @@ export default function App() {
     'Poppins-Medium': require('./assets/fonts/poppins/Poppins-Medium.ttf'),
     'Poppins-SemiBold': require('./assets/fonts/poppins/Poppins-SemiBold.ttf'),
     'Poppins-Bold': require('./assets/fonts/poppins/Poppins-Bold.ttf'),
+    'Moonlight': require('./assets/fonts/moonlight/Moonlight.ttf'),
   });
+  const [showWelcome, setShowWelcome] = useState(true);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const welcomeOpacity = useRef(new Animated.Value(1)).current;
+  const welcomeScale = useRef(new Animated.Value(1)).current;
+  const homeOpacity = useRef(new Animated.Value(0)).current;
+  const homeScale = useRef(new Animated.Value(0.95)).current;
+  const backgroundOpacity = useRef(new Animated.Value(0)).current;
+
+  // Reset animation values when needed
+  const resetAnimationValues = () => {
+    welcomeOpacity.setValue(1);
+    welcomeScale.setValue(1);
+    homeOpacity.setValue(0);
+    homeScale.setValue(0.95);
+    backgroundOpacity.setValue(0);
+  };
+
+  // Reset animation values on component mount
+  useEffect(() => {
+    resetAnimationValues();
+  }, []);
+
+  const handleGetStarted = () => {
+    setIsTransitioning(true);
+    
+    // Create a sophisticated dissipate effect
+    Animated.parallel([
+      // WelcomeScreen: fade out and scale down (dissipate effect)
+      Animated.timing(welcomeOpacity, {
+        toValue: 0,
+        duration: 800,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+      Animated.timing(welcomeScale, {
+        toValue: 0.8,
+        duration: 800,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+      // HomeScreen: fade in and scale up (emerge effect)
+      Animated.timing(homeOpacity, {
+        toValue: 1,
+        duration: 800,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+      Animated.timing(homeScale, {
+        toValue: 1,
+        duration: 800,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+      // Background: subtle fade to white during transition
+      Animated.timing(backgroundOpacity, {
+        toValue: 1,
+        duration: 400,
+        easing: Easing.out(Easing.quad),
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      setShowWelcome(false);
+      setIsTransitioning(false);
+      // Reset animation values after a small delay to prevent glitch
+      setTimeout(() => {
+        resetAnimationValues();
+      }, 100);
+    });
+  };
 
   if (!fontsLoaded) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#5D8658" />
-      </View>
-    );
+    return <WelcomeScreen onGetStarted={handleGetStarted} />;
   }
 
-  return (
+  const MainApp = () => (
     <PaperProvider theme={theme}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -125,5 +194,55 @@ export default function App() {
       </NavigationContainer>
       <StatusBar style="auto" />
     </PaperProvider>
+  );
+
+  if (showWelcome && !isTransitioning) {
+    return <WelcomeScreen onGetStarted={handleGetStarted} />;
+  }
+
+  if (!showWelcome && !isTransitioning) {
+    return <MainApp />;
+  }
+
+  // During transition, show both screens with dissipate effect
+  return (
+    <View style={{ flex: 1 }}>
+      {/* Background overlay for smooth transition */}
+      <Animated.View style={{ 
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        bottom: 0, 
+        backgroundColor: 'white',
+        opacity: backgroundOpacity,
+        zIndex: 1
+      }} />
+      
+      <Animated.View style={{ 
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        bottom: 0, 
+        opacity: welcomeOpacity,
+        transform: [{ scale: welcomeScale }],
+        zIndex: 2
+      }}>
+        <WelcomeScreen onGetStarted={() => {}} />
+      </Animated.View>
+      <Animated.View style={{ 
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        bottom: 0, 
+        opacity: homeOpacity,
+        transform: [{ scale: homeScale }],
+        zIndex: 3
+      }}>
+        <MainApp />
+      </Animated.View>
+    </View>
   );
 }
