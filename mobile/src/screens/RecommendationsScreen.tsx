@@ -140,7 +140,8 @@ export default function RecommendationsScreen() {
             <Chip
               mode="outlined"
               compact
-              style={styles.tag}
+              style={[styles.tag, { backgroundColor: '#7FB878' }]}
+              textStyle={{ color: 'white' }}
             >
               {Math.round(product.matchScore * 100)}% match
             </Chip>
@@ -153,7 +154,7 @@ export default function RecommendationsScreen() {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#6366f1', '#8b5cf6']}
+        colors={['#5D8658', '#7FB878']}
         style={styles.header}
       >
         <Text variant="headlineSmall" style={styles.headerTitle}>
@@ -220,7 +221,7 @@ export default function RecommendationsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f1f5f9',
+    backgroundColor: '#faf4dc',
   },
   header: {
     paddingTop: 50,
@@ -251,6 +252,7 @@ const styles = StyleSheet.create({
   },
   categoryChip: {
     marginRight: 8,
+    backgroundColor: '#E8F0E6',
   },
   loadingContainer: {
     flex: 1,
@@ -301,7 +303,7 @@ const styles = StyleSheet.create({
   },
   productPrice: {
     fontWeight: 'bold',
-    color: '#10b981',
+    color: '#5D8658',
     marginBottom: 8,
   },
   productDescription: {
@@ -315,12 +317,14 @@ const styles = StyleSheet.create({
   tag: {
     marginRight: 4,
     marginBottom: 4,
+    backgroundColor: '#E8F0E6',
   },
   fab: {
     position: 'absolute',
     margin: 16,
     right: 0,
     bottom: 0,
+    backgroundColor: '#5D8658',
   },
 });
 

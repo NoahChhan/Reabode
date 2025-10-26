@@ -1,10 +1,11 @@
 import React from 'react';
+import { ActivityIndicator, View, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useFonts } from 'expo-font';
 
 // Screens
 import HomeScreen from './src/screens/HomeScreen';
@@ -24,24 +25,47 @@ function TabNavigator() {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
-          let iconName: string;
+          let iconSource;
 
           if (route.name === 'Home') {
-            iconName = 'home';
+            iconSource = require('./assets/icons/House.png');
           } else if (route.name === 'Camera') {
-            iconName = 'camera-alt';
+            iconSource = require('./assets/icons/camera.png');
           } else if (route.name === 'Recommendations') {
-            iconName = 'shopping-bag';
+            iconSource = require('./assets/icons/recommendations.png');
           } else if (route.name === 'Profile') {
-            iconName = 'person';
+            iconSource = require('./assets/icons/profile.png');
           } else {
-            iconName = 'help';
+            iconSource = require('./assets/icons/House.png');
           }
 
-          return <Icon name={iconName} size={size} color={color} />;
+          return (
+            <Image 
+              source={iconSource} 
+              style={{ 
+                width: 36, 
+                height: 36,
+              }} 
+              resizeMode="contain"
+            />
+          );
         },
-        tabBarActiveTintColor: theme.colors.primary,
-        tabBarInactiveTintColor: 'gray',
+        tabBarActiveTintColor: '#5D8658',
+        tabBarInactiveTintColor: '#6B7280',
+        tabBarStyle: {
+          backgroundColor: '#ffffff',
+          borderTopWidth: 1,
+          borderTopColor: '#E5E7EB',
+          height: 88,
+          paddingBottom: 20,
+          paddingTop: 8,
+        },
+        tabBarLabelStyle: {
+          fontSize: 13,
+          fontFamily: 'Poppins-Regular',
+          marginTop: 4,
+          marginBottom: 4,
+        },
         headerShown: false,
       })}
     >
@@ -54,6 +78,22 @@ function TabNavigator() {
 }
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    'Poppins-Light': require('./assets/fonts/poppins/Poppins-Light.ttf'),
+    'Poppins-Regular': require('./assets/fonts/poppins/Poppins-Regular.ttf'),
+    'Poppins-Medium': require('./assets/fonts/poppins/Poppins-Medium.ttf'),
+    'Poppins-SemiBold': require('./assets/fonts/poppins/Poppins-SemiBold.ttf'),
+    'Poppins-Bold': require('./assets/fonts/poppins/Poppins-Bold.ttf'),
+  });
+
+  if (!fontsLoaded) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#5D8658" />
+      </View>
+    );
+  }
+
   return (
     <PaperProvider theme={theme}>
       <NavigationContainer>

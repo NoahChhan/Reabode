@@ -14,7 +14,7 @@ export default function ProfileScreen() {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#6366f1', '#8b5cf6']}
+        colors={['#5D8658', '#7FB878']}
         style={styles.header}
       >
         <Text variant="headlineSmall" style={styles.headerTitle}>
@@ -87,7 +87,7 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f1f5f9',
+    backgroundColor: '#faf4dc',
   },
   header: {
     paddingTop: 50,
@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     marginBottom: 16,
     fontWeight: '600',
+    color: '#2A3B28',
   },
   logoutButton: {
     marginTop: 30,

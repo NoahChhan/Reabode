@@ -1,0 +1,379 @@
+{
+    "appName": "Reabode",
+    "brandColors": {
+      "cream": "#fff8e6",
+      "logoGreen": "#5D8658"
+    },
+    "designSystem": {
+      "colors": {
+        "primary": {
+          "main": "#5D8658",
+          "light": "#7BA575",
+          "dark": "#4A6B45",
+          "contrast": "#ffffff"
+        },
+        "secondary": {
+          "main": "#6B9B65",
+          "light": "#8BB186",
+          "dark": "#557D50",
+          "contrast": "#ffffff"
+        },
+        "accent": {
+          "main": "#7FB878",
+          "light": "#9FC89A",
+          "dark": "#69A062",
+          "contrast": "#ffffff"
+        },
+        "success": {
+          "main": "#7FB878",
+          "light": "#9FC89A",
+          "dark": "#69A062",
+          "contrast": "#ffffff"
+        },
+        "error": {
+          "main": "#C85A54",
+          "light": "#D87872",
+          "dark": "#A64842",
+          "contrast": "#ffffff"
+        },
+        "warning": {
+          "main": "#D4A574",
+          "light": "#E0B88E",
+          "dark": "#B8895E",
+          "contrast": "#ffffff"
+        },
+        "background": {
+          "primary": "#fff8e6",
+          "secondary": "#faf4dc",
+          "tertiary": "#f5efd2",
+          "card": "#ffffff",
+          "dark": "#2A3B28"
+        },
+        "surface": {
+          "main": "#ffffff",
+          "elevated": "#fffdf7",
+          "overlay": "rgba(45, 59, 40, 0.7)",
+          "cream": "#fff8e6"
+        },
+        "text": {
+          "primary": "#2A3B28",
+          "secondary": "#4A6B45",
+          "tertiary": "#6B9B65",
+          "disabled": "#B8C9B5",
+          "inverse": "#ffffff",
+          "onCream": "#2A3B28",
+          "onGreen": "#ffffff"
+        },
+        "border": {
+          "main": "#D4E3D1",
+          "light": "#E8F0E6",
+          "dark": "#B8C9B5"
+        },
+        "gradient": {
+          "primary": ["#5D8658", "#7BA575"],
+          "secondary": ["#7BA575", "#9FC89A"],
+          "accent": ["#7FB878", "#9FC89A"],
+          "creamToGreen": ["#fff8e6", "#E8F0E6"],
+          "greenToDeep": ["#5D8658", "#4A6B45"]
+        }
+      },
+      "typography": {
+        "fontFamily": {
+          "primary": "Moonlight",
+          "secondary": "System",
+          "body": "System",
+          "monospace": "Courier"
+        },
+        "fontSize": {
+          "xs": 12,
+          "sm": 14,
+          "base": 16,
+          "lg": 18,
+          "xl": 20,
+          "2xl": 24,
+          "3xl": 30,
+          "4xl": 36,
+          "5xl": 48
+        },
+        "fontWeight": {
+          "light": "300",
+          "regular": "400",
+          "medium": "500",
+          "semibold": "600",
+          "bold": "700",
+          "extrabold": "800"
+        },
+        "lineHeight": {
+          "tight": 1.2,
+          "normal": 1.5,
+          "relaxed": 1.75,
+          "loose": 2
+        },
+        "styles": {
+          "h1": {
+            "fontSize": 36,
+            "fontWeight": "700",
+            "lineHeight": 1.2,
+            "letterSpacing": -0.5,
+            "fontFamily": "Moonlight",
+            "color": "#5D8658"
+          },
+          "h2": {
+            "fontSize": 30,
+            "fontWeight": "700",
+            "lineHeight": 1.3,
+            "letterSpacing": -0.3,
+            "fontFamily": "Moonlight",
+            "color": "#5D8658"
+          },
+          "h3": {
+            "fontSize": 24,
+            "fontWeight": "600",
+            "lineHeight": 1.4,
+            "letterSpacing": -0.2,
+            "fontFamily": "Moonlight",
+            "color": "#5D8658"
+          },
+          "h4": {
+            "fontSize": 20,
+            "fontWeight": "600",
+            "lineHeight": 1.5,
+            "color": "#4A6B45"
+          },
+          "h5": {
+            "fontSize": 18,
+            "fontWeight": "600",
+            "lineHeight": 1.5,
+            "color": "#4A6B45"
+          },
+          "h6": {
+            "fontSize": 16,
+            "fontWeight": "600",
+            "lineHeight": 1.5,
+            "color": "#4A6B45"
+          },
+          "body1": {
+            "fontSize": 16,
+            "fontWeight": "400",
+            "lineHeight": 1.5,
+            "color": "#2A3B28"
+          },
+          "body2": {
+            "fontSize": 14,
+            "fontWeight": "400",
+            "lineHeight": 1.5,
+            "color": "#4A6B45"
+          },
+          "subtitle1": {
+            "fontSize": 16,
+            "fontWeight": "500",
+            "lineHeight": 1.5,
+            "color": "#4A6B45"
+          },
+          "subtitle2": {
+            "fontSize": 14,
+            "fontWeight": "500",
+            "lineHeight": 1.5,
+            "color": "#6B9B65"
+          },
+          "caption": {
+            "fontSize": 12,
+            "fontWeight": "400",
+            "lineHeight": 1.4,
+            "color": "#6B9B65"
+          },
+          "button": {
+            "fontSize": 16,
+            "fontWeight": "600",
+            "lineHeight": 1.5,
+            "letterSpacing": 0.5,
+            "textTransform": "none",
+            "color": "#ffffff"
+          }
+        }
+      },
+      "spacing": {
+        "xs": 4,
+        "sm": 8,
+        "md": 16,
+        "lg": 24,
+        "xl": 32,
+        "2xl": 48,
+        "3xl": 64
+      },
+      "borderRadius": {
+        "none": 0,
+        "sm": 4,
+        "md": 8,
+        "lg": 12,
+        "xl": 16,
+        "2xl": 24,
+        "full": 9999
+      },
+      "shadows": {
+        "none": {
+          "shadowColor": "#000",
+          "shadowOffset": { "width": 0, "height": 0 },
+          "shadowOpacity": 0,
+          "shadowRadius": 0,
+          "elevation": 0
+        },
+        "sm": {
+          "shadowColor": "#5D8658",
+          "shadowOffset": { "width": 0, "height": 1 },
+          "shadowOpacity": 0.05,
+          "shadowRadius": 2,
+          "elevation": 1
+        },
+        "md": {
+          "shadowColor": "#5D8658",
+          "shadowOffset": { "width": 0, "height": 2 },
+          "shadowOpacity": 0.1,
+          "shadowRadius": 4,
+          "elevation": 2
+        },
+        "lg": {
+          "shadowColor": "#5D8658",
+          "shadowOffset": { "width": 0, "height": 4 },
+          "shadowOpacity": 0.15,
+          "shadowRadius": 8,
+          "elevation": 4
+        },
+        "xl": {
+          "shadowColor": "#5D8658",
+          "shadowOffset": { "width": 0, "height": 8 },
+          "shadowOpacity": 0.2,
+          "shadowRadius": 16,
+          "elevation": 8
+        }
+      },
+      "components": {
+        "button": {
+          "primary": {
+            "backgroundColor": "#5D8658",
+            "color": "#ffffff",
+            "borderRadius": 12,
+            "paddingVertical": 14,
+            "paddingHorizontal": 24,
+            "fontSize": 16,
+            "fontWeight": "600"
+          },
+          "secondary": {
+            "backgroundColor": "transparent",
+            "color": "#5D8658",
+            "borderColor": "#5D8658",
+            "borderWidth": 2,
+            "borderRadius": 12,
+            "paddingVertical": 14,
+            "paddingHorizontal": 24,
+            "fontSize": 16,
+            "fontWeight": "600"
+          },
+          "text": {
+            "backgroundColor": "transparent",
+            "color": "#5D8658",
+            "paddingVertical": 8,
+            "paddingHorizontal": 16,
+            "fontSize": 16,
+            "fontWeight": "600"
+          },
+          "light": {
+            "backgroundColor": "#E8F0E6",
+            "color": "#4A6B45",
+            "borderRadius": 12,
+            "paddingVertical": 14,
+            "paddingHorizontal": 24,
+            "fontSize": 16,
+            "fontWeight": "600"
+          }
+        },
+        "card": {
+          "backgroundColor": "#ffffff",
+          "borderRadius": 16,
+          "padding": 16,
+          "shadowColor": "#5D8658",
+          "shadowOffset": { "width": 0, "height": 2 },
+          "shadowOpacity": 0.08,
+          "shadowRadius": 8,
+          "elevation": 2,
+          "borderColor": "#E8F0E6",
+          "borderWidth": 1
+        },
+        "input": {
+          "backgroundColor": "#ffffff",
+          "borderColor": "#D4E3D1",
+          "borderWidth": 1,
+          "borderRadius": 12,
+          "paddingVertical": 12,
+          "paddingHorizontal": 16,
+          "fontSize": 16,
+          "color": "#2A3B28"
+        },
+        "chip": {
+          "backgroundColor": "#E8F0E6",
+          "color": "#4A6B45",
+          "borderRadius": 20,
+          "paddingVertical": 6,
+          "paddingHorizontal": 12,
+          "fontSize": 14,
+          "borderColor": "#D4E3D1",
+          "borderWidth": 1
+        }
+      },
+      "layout": {
+        "containerPadding": 20,
+        "sectionSpacing": 24,
+        "cardSpacing": 16,
+        "maxWidth": 1200
+      },
+      "animation": {
+        "duration": {
+          "fast": 150,
+          "normal": 300,
+          "slow": 500
+        },
+        "easing": {
+          "easeIn": "ease-in",
+          "easeOut": "ease-out",
+          "easeInOut": "ease-in-out"
+        }
+      }
+    },
+    "screens": {
+      "HomeScreen": {
+        "backgroundColor": "#fff8e6",
+        "titleColor": "#5D8658",
+        "subtitleColor": "#4A6B45",
+        "buttonBackgroundColor": "#5D8658",
+        "buttonTextColor": "#ffffff",
+        "accentColor": "#7BA575"
+      },
+      "RoomAnalysisScreen": {
+        "backgroundColor": "#faf4dc",
+        "headerGradient": ["#5D8658", "#7BA575"],
+        "stepIndicatorColor": "#5D8658",
+        "loadingGradient": ["#5D8658", "#7FB878"],
+        "cardBackgroundColor": "#ffffff",
+        "chipColor": "#E8F0E6",
+        "chipTextColor": "#4A6B45",
+        "progressBarColor": "#7FB878"
+      },
+      "RecommendationsScreen": {
+        "backgroundColor": "#faf4dc",
+        "cardBackgroundColor": "#ffffff",
+        "matchBadgeColor": "#7FB878",
+        "priceColor": "#5D8658",
+        "favoriteColor": "#C85A54",
+        "categoryChipBackground": "#E8F0E6",
+        "categoryChipText": "#4A6B45"
+      },
+      "CameraScreen": {
+        "backgroundColor": "#2A3B28",
+        "buttonColor": "#5D8658",
+        "iconColor": "#ffffff"
+      }
+    },
+    "usage": {
+      "note": "This design system uses a warm cream (#fff8e6) background with earthy green tones (#5D8658 as primary). Headers use Moonlight font. All screens maintain the natural, organic feel with green gradients and cream backgrounds."
+    }
+  }
