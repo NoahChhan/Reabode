@@ -96,7 +96,7 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f1f5f9',
+    backgroundColor: '#fff8e6',
   },
   header: {
     paddingTop: 50,
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   headerTitle: {
-    color: 'white',
+    color: '#5D8658',
     fontWeight: 'bold',
   },
   content: {
@@ -118,6 +118,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     marginBottom: 16,
     fontWeight: '600',
+    color: '#5D8658',
   },
   logoutButton: {
     marginTop: 30,

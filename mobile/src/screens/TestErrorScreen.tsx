@@ -1,31 +1,20 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text, Button, Card } from 'react-native-paper';
-import { useError } from '../contexts/ErrorContext';
-import { apiService } from '../services/api';
+import { useNavigation } from '@react-navigation/native';
+import { useErrorOverlay } from '../hooks/useErrorOverlay';
 
 export default function TestErrorScreen() {
-  const { showError } = useError();
+  const navigation = useNavigation();
+  const { showError, ErrorOverlay } = useErrorOverlay();
 
-  const testApiError = async () => {
-    try {
-      // This will fail if backend is not running
-      await apiService.healthCheck();
-    } catch (error) {
-      console.log('API error caught:', error);
-    }
+  const testError = () => {
+    const error = new Error('Looks like we tripped over a rug.');
+    showError(error, false);
   };
 
-  const testCustomError = () => {
-    showError(
-      'Test Error',
-      'This is a test error popup to demonstrate the error handling system.'
-    );
-  };
-
-  const testCrash = () => {
-    // This will trigger the ErrorBoundary
-    throw new Error('Intentional crash for testing ErrorBoundary');
+  const goBack = () => {
+    navigation.goBack();
   };
 
   return (
@@ -36,38 +25,32 @@ export default function TestErrorScreen() {
             Error Testing
           </Text>
           <Text variant="bodyMedium" style={styles.description}>
-            Test different types of errors to see how the app handles them.
+            Test the error handling system to see how errors are displayed to users.
           </Text>
           
           <View style={styles.buttonContainer}>
             <Button
               mode="contained"
-              onPress={testApiError}
-              style={styles.button}
-            >
-              Test API Error
-            </Button>
-            
-            <Button
-              mode="outlined"
-              onPress={testCustomError}
-              style={styles.button}
-            >
-              Test Custom Error
-            </Button>
-            
-            <Button
-              mode="outlined"
-              onPress={testCrash}
-              style={[styles.button, styles.dangerButton]}
+              onPress={testError}
+              style={styles.testButton}
               buttonColor="#ef4444"
-              textColor="white"
             >
-              Test App Crash
+              Test Error Popup
+            </Button>
+            
+            <Button
+              mode="outlined"
+              onPress={goBack}
+              style={styles.backButton}
+            >
+              ← Back to App
             </Button>
           </View>
         </Card.Content>
       </Card>
+      
+      {/* Error overlay for this screen */}
+      <ErrorOverlay />
     </View>
   );
 }
@@ -76,7 +59,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f1f5f9',
+    backgroundColor: '#fff8e6',
     justifyContent: 'center',
   },
   card: {
@@ -86,19 +69,21 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     textAlign: 'center',
     fontWeight: 'bold',
+    color: '#5D8658',
   },
   description: {
     marginBottom: 24,
     textAlign: 'center',
     opacity: 0.7,
+    color: '#5D8658',
   },
   buttonContainer: {
-    gap: 12,
+    gap: 16,
   },
-  button: {
-    marginBottom: 8,
+  testButton: {
+    paddingVertical: 8,
   },
-  dangerButton: {
-    borderColor: '#ef4444',
+  backButton: {
+    paddingVertical: 8,
   },
 });

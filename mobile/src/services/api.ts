@@ -8,7 +8,7 @@ import {
 } from '../types';
 import { Alert } from 'react-native';
 
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:8000';
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://172.20.10.5:8000';
 
 class ApiService {
   private async request<T>(

@@ -6,7 +6,7 @@ import {
   Alert,
   Dimensions,
 } from 'react-native';
-import { Camera, CameraType } from 'expo-camera';
+import { CameraView, Camera } from 'expo-camera';
 import { Text, Button, Surface, IconButton } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import * as Haptics from 'expo-haptics';
@@ -18,10 +18,10 @@ const { width, height } = Dimensions.get('window');
 export default function CameraScreen() {
   const navigation = useNavigation();
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [cameraType, setCameraType] = useState(CameraType.back);
+  const [cameraType, setCameraType] = useState<"back" | "front">("back");
   const [capturedImages, setCapturedImages] = useState<RoomImage[]>([]);
   const [isCapturing, setIsCapturing] = useState(false);
-  const cameraRef = useRef<Camera>(null);
+  const cameraRef = useRef<any>(null);
 
   useEffect(() => {
     getCameraPermissions();
@@ -40,21 +40,28 @@ export default function CameraScreen() {
 
     try {
       const photo = await cameraRef.current.takePictureAsync({
-        quality: 0.8,
+        quality: 0.7,  // Compress to reduce size
         base64: true,
       });
+
+      // Ensure proper base64 format
+      let base64Data = photo.base64;
+      if (base64Data && !base64Data.startsWith('data:image')) {
+        base64Data = `data:image/jpeg;base64,${base64Data}`;
+      }
 
       const newImage: RoomImage = {
         id: Date.now().toString(),
         uri: photo.uri,
-        base64: photo.base64,
+        base64: base64Data,
         timestamp: Date.now(),
       };
 
       setCapturedImages(prev => [...prev, newImage]);
+      Alert.alert('Success', 'Photo captured!');
     } catch (error) {
       console.error('Error taking picture:', error);
-      Alert.alert('Error', 'Failed to take picture');
+      Alert.alert('Error', 'Failed to take picture. Please try again.');
     } finally {
       setIsCapturing(false);
     }
@@ -76,14 +83,21 @@ export default function CameraScreen() {
     });
 
     if (!result.canceled && result.assets[0]) {
+      // Ensure proper base64 format for gallery images too
+      let base64Data = result.assets[0].base64;
+      if (base64Data && !base64Data.startsWith('data:image')) {
+        base64Data = `data:image/jpeg;base64,${base64Data}`;
+      }
+
       const newImage: RoomImage = {
         id: Date.now().toString(),
         uri: result.assets[0].uri,
-        base64: result.assets[0].base64,
+        base64: base64Data,
         timestamp: Date.now(),
       };
 
       setCapturedImages(prev => [...prev, newImage]);
+      Alert.alert('Success', 'Photo added from gallery!');
     }
   };
 
@@ -121,9 +135,9 @@ export default function CameraScreen() {
 
   return (
     <View style={styles.container}>
-      <Camera
+      <CameraView
         style={styles.camera}
-        type={cameraType}
+        facing={cameraType}
         ref={cameraRef}
       >
         <View style={styles.cameraOverlay}>
@@ -141,7 +155,7 @@ export default function CameraScreen() {
               icon="flip-camera-android"
               iconColor="white"
               onPress={() => setCameraType(
-                cameraType === CameraType.back ? CameraType.front : CameraType.back
+                cameraType === "back" ? "front" : "back"
               )}
             />
           </View>
@@ -166,7 +180,7 @@ export default function CameraScreen() {
             <View style={styles.placeholder} />
           </View>
         </View>
-      </Camera>
+      </CameraView>
 
       {/* Captured Images Preview */}
       {capturedImages.length > 0 && (
@@ -220,7 +234,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   headerTitle: {
-    color: 'white',
+    color: '#5D8658',
     fontWeight: 'bold',
   },
   controls: {
@@ -297,4 +311,3 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 });
-
