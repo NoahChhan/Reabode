@@ -8,7 +8,9 @@ class GeminiService:
     def __init__(self):
         api_key = os.getenv("GEMINI_API_KEY")
         if not api_key:
-            raise ValueError("GEMINI_API_KEY environment variable is required")
+            print("Warning: GEMINI_API_KEY environment variable not set. Gemini service will return mock data.")
+            self.model = None
+            return
         
         genai.configure(api_key=api_key)
         self.model = genai.GenerativeModel('gemini-1.5-pro')
@@ -18,6 +20,24 @@ class GeminiService:
         Analyze a room image and return structured data using Gemini AI
         """
         try:
+            # If no API key, return mock data for testing
+            if self.model is None:
+                print("Using mock data (no Gemini API key)")
+                return {
+                    "roomType": "Living Room",
+                    "currentStyle": "Modern",
+                    "colorScheme": ["white", "gray", "blue"],
+                    "furniture": ["sofa", "coffee table", "tv stand"],
+                    "improvements": [
+                        "Add plants for warmth",
+                        "Better lighting with floor lamps",
+                        "Colorful throw pillows",
+                        "Wall art or decorations",
+                        "Area rug to define space"
+                    ],
+                    "confidence": 0.75
+                }
+            
             # Remove data:image/jpeg;base64, prefix if present
             if "base64," in base64_image:
                 base64_image = base64_image.split("base64,")[1]
@@ -71,7 +91,7 @@ class GeminiService:
             
         except Exception as e:
             print(f"Gemini API error: {e}")
-            # Return as fallbackl
+            # Return as fallback
             return {
                 "roomType": "",
                 "currentStyle": "",
