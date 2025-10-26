@@ -17,7 +17,13 @@ load_dotenv()
 from services.gemini_service import gemini_service
 from services.product_service import product_service
 
+# Import recommendation routes
+from routes.recommend_products import router as recommend_router
+
 app = FastAPI(title="Reabode AI Interior Designer API", version="1.0.0")
+
+# Include recommendation routes
+app.include_router(recommend_router)
 
 # Configure CORS for mobile app
 app.add_middleware(
