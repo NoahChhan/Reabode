@@ -1,17 +1,11 @@
-import React from 'react';
-import { ActivityIndicator, View, Image } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
-import { Provider as PaperProvider } from 'react-native-paper';
-import { StatusBar } from 'expo-status-bar';
-import { useFonts } from 'expo-font';
 import React from "react";
+import { ActivityIndicator, View, Image } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Provider as PaperProvider } from "react-native-paper";
 import { StatusBar } from "expo-status-bar";
+import { useFonts } from "expo-font";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 // Screens
