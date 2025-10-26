@@ -12,6 +12,11 @@ import CameraScreen from './src/screens/CameraScreen';
 import RecommendationsScreen from './src/screens/RecommendationsScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import RoomAnalysisScreen from './src/screens/RoomAnalysisScreen';
+import TestErrorScreen from './src/screens/TestErrorScreen';
+
+// Error handling
+import { ErrorBoundary } from './src/components/ErrorBoundary';
+import { ErrorProvider } from './src/contexts/ErrorContext';
 
 // Theme
 import { theme } from './src/theme/theme';
@@ -55,15 +60,20 @@ function TabNavigator() {
 
 export default function App() {
   return (
-    <PaperProvider theme={theme}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Main" component={TabNavigator} />
-          <Stack.Screen name="RoomAnalysis" component={RoomAnalysisScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-      <StatusBar style="auto" />
-    </PaperProvider>
+    <ErrorBoundary>
+      <PaperProvider theme={theme}>
+        <ErrorProvider>
+          <NavigationContainer>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Main" component={TabNavigator} />
+              <Stack.Screen name="RoomAnalysis" component={RoomAnalysisScreen} />
+              <Stack.Screen name="TestError" component={TestErrorScreen} />
+            </Stack.Navigator>
+          </NavigationContainer>
+          <StatusBar style="auto" />
+        </ErrorProvider>
+      </PaperProvider>
+    </ErrorBoundary>
   );
 }
 
