@@ -37,9 +37,11 @@ export default function HomeScreen() {
   const loadProjects = async () => {
     try {
       const data = await apiService.getProjects();
-      setProjects(data);
+      setProjects(data || []); // Ensure we always have an array
+      console.log('✅ Successfully loaded projects from backend:', data);
     } catch (error) {
-      console.error('Error loading projects:', error);
+      console.log('⚠️ Backend not available, using fallback data');
+      setProjects([]);
     } finally {
       setLoading(false);
     }

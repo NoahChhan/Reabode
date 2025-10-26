@@ -80,9 +80,9 @@ export default function RoomAnalysisScreen() {
       );
       setAnalysis(analysisResult);
       setCurrentStep(3);
+      console.log('✅ Successfully analyzed room with backend:', analysisResult);
     } catch (error) {
-      console.error('Analysis failed:', error);
-      // Fallback to mock data if API fails
+      console.log('⚠️ Backend not available, using mock analysis data');
       setAnalysis({
         roomType: "Living Room",
         currentStyle: "Modern",

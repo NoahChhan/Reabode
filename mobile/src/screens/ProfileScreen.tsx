@@ -39,12 +39,6 @@ export default function ProfileScreen() {
             />
             
             <List.Item
-              title="Dark Mode"
-              description="Use dark theme"
-              right={() => <Switch value={false} />}
-            />
-            
-            <List.Item
               title="Auto-save Projects"
               description="Automatically save your design projects"
               right={() => <Switch value={true} />}

@@ -10,7 +10,7 @@ import { CameraView, Camera } from 'expo-camera';
 import { Text, Button, Surface, IconButton } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import * as Haptics from 'expo-haptics';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { RoomImage } from '../types';
 
 const { width, height } = Dimensions.get('window');
@@ -21,18 +21,31 @@ export default function CameraScreen() {
   const [cameraType, setCameraType] = useState<"back" | "front">("back");
   const [capturedImages, setCapturedImages] = useState<RoomImage[]>([]);
   const [isCapturing, setIsCapturing] = useState(false);
+  const [cameraKey, setCameraKey] = useState(0); // Force re-render
   const cameraRef = useRef<any>(null);
 
   useEffect(() => {
     getCameraPermissions();
   }, []);
 
+  // Re-initialize camera when screen comes into focus
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log('📸 Camera screen focused - re-initializing camera');
+      // Force camera re-render by updating key (instant)
+      setCameraKey(prev => prev + 1);
+    }, [])
+  );
+
   const getCameraPermissions = async () => {
+    console.log('🔐 Requesting camera permissions...');
     const { status } = await Camera.requestCameraPermissionsAsync();
+    console.log('🔐 Camera permission status:', status);
     setHasPermission(status === 'granted');
   };
 
   const takePicture = async () => {
+    console.log('📸 Take picture called, cameraRef:', !!cameraRef.current, 'isCapturing:', isCapturing);
     if (!cameraRef.current || isCapturing) return;
 
     setIsCapturing(true);
@@ -92,7 +105,7 @@ export default function CameraScreen() {
       const newImage: RoomImage = {
         id: Date.now().toString(),
         uri: result.assets[0].uri,
-        base64: base64Data,
+        base64: base64Data || undefined,
         timestamp: Date.now(),
       };
 
@@ -111,9 +124,9 @@ export default function CameraScreen() {
       return;
     }
 
-    navigation.navigate('RoomAnalysis' as never, { 
+    (navigation as any).navigate('RoomAnalysis', { 
       images: capturedImages 
-    } as never);
+    });
   };
 
   if (hasPermission === null) {
@@ -136,6 +149,7 @@ export default function CameraScreen() {
   return (
     <View style={styles.container}>
       <CameraView
+        key={cameraKey}
         style={styles.camera}
         facing={cameraType}
         ref={cameraRef}

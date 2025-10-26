@@ -37,12 +37,7 @@ export default function RecommendationsScreen() {
   const dimensions = params?.dimensions;
   const moodPreferences = params?.moodPreferences;
   
-  // Show error if analysis is missing
-  React.useEffect(() => {
-    if (!analysis) {
-      showError(new Error('Room analysis data is missing. Please go back and scan your room again.'));
-    }
-  }, [analysis, showError]);
+  // Don't show error popup, just handle missing analysis gracefully
 
   const [recommendations, setRecommendations] = useState<ProductRecommendation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -61,9 +56,9 @@ export default function RecommendationsScreen() {
         moodPreferences.style
       );
       setRecommendations(data);
+      console.log('✅ Successfully loaded recommendations from backend:', data);
     } catch (error) {
-      console.error('Error loading recommendations:', error);
-      // Fallback to mock data if API fails
+      console.log('⚠️ Backend not available, using mock recommendations');
       setRecommendations([
         {
           id: "1",
@@ -128,7 +123,7 @@ export default function RecommendationsScreen() {
     ? recommendations
     : recommendations.filter(rec => rec.category === selectedCategory);
 
-  const formatPrice = (price: number, currency: string) => {
+  const formatPrice = (price: number, currency: string = 'USD') => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: currency,
@@ -199,33 +194,52 @@ export default function RecommendationsScreen() {
           Recommendations
         </Text>
         <Text variant="bodyMedium" style={styles.headerSubtitle}>
-          {recommendations.length} products found
+          {analysis ? `${recommendations.length} products found` : 'Take a photo to get started'}
         </Text>
       </LinearGradient>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Category Filter */}
-        <Surface style={styles.filterContainer}>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.categoryContainer}
-          >
-            {categories.map((category) => (
-              <Chip
-                key={category.key}
-                selected={selectedCategory === category.key}
-                onPress={() => setSelectedCategory(category.key)}
-                style={styles.categoryChip}
-              >
-                {category.label}
-              </Chip>
-            ))}
-          </ScrollView>
-        </Surface>
+        {/* Category Filter - only show when we have analysis */}
+        {analysis && (
+          <Surface style={styles.filterContainer}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.categoryContainer}
+            >
+              {categories.map((category) => (
+                <Chip
+                  key={category.key}
+                  selected={selectedCategory === category.key}
+                  onPress={() => setSelectedCategory(category.key)}
+                  style={styles.categoryChip}
+                >
+                  {category.label}
+                </Chip>
+              ))}
+            </ScrollView>
+          </Surface>
+        )}
 
         {/* Products Grid */}
-        {loading ? (
+        {!analysis ? (
+          <View style={styles.emptyContainer}>
+            <Text variant="headlineMedium" style={styles.emptyTitle}>
+              📸 Snap a photo first!
+            </Text>
+            <Text variant="bodyLarge" style={styles.emptySubtext}>
+              Take a photo of your room to get personalized recommendations
+            </Text>
+            <Button
+              mode="contained"
+              onPress={() => navigation.navigate('Camera' as never)}
+              style={styles.cameraButton}
+              icon="camera"
+            >
+              Take Photo
+            </Button>
+          </View>
+        ) : loading ? (
           <View style={styles.loadingContainer}>
             <Text>Loading recommendations...</Text>
           </View>
@@ -306,10 +320,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 40,
   },
+  emptyTitle: {
+    textAlign: 'center',
+    marginBottom: 16,
+    color: '#5D8658',
+    fontWeight: 'bold',
+  },
   emptySubtext: {
     opacity: 0.7,
     marginTop: 8,
+    marginBottom: 24,
+    textAlign: 'center',
     color: '#5D8658',
+  },
+  cameraButton: {
+    marginTop: 16,
   },
   productsGrid: {
     flexDirection: 'row',
