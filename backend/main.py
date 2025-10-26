@@ -85,6 +85,8 @@ class RecommendationRequest(BaseModel):
     analysis: RoomAnalysis
     budget: str
     style: List[str]
+    furniture_preferences: Optional[List[str]] = None
+    additional_info: Optional[List[str]] = None
 
 # In-memory storage (replace with database in production)
 projects_db: Dict[str, DesignProject] = {}
@@ -147,6 +149,8 @@ async def get_recommendations(request: RecommendationRequest):
             style_preferences=request.style,
             color_preferences=request.analysis.colorScheme,
             budget=request.budget,
+            furniture_preferences=request.furniture_preferences,
+            additional_info=request.additional_info,
             limit=10
         )
         
