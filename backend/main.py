@@ -8,6 +8,14 @@ import json
 import os
 from datetime import datetime
 import uuid
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# Import Gemini service
+from services.gemini_service import gemini_service
+from services.product_service import product_service
 
 app = FastAPI(title="Reabode AI Interior Designer API", version="1.0.0")
 
@@ -73,6 +81,13 @@ class DesignProject(BaseModel):
     createdAt: int
     updatedAt: int
 
+class RecommendationRequest(BaseModel):
+    analysis: RoomAnalysis
+    budget: str
+    style: List[str]
+    furniture_preferences: Optional[List[str]] = None
+    additional_info: Optional[List[str]] = None
+
 # In-memory storage (replace with database in production)
 projects_db: Dict[str, DesignProject] = {}
 
@@ -92,66 +107,77 @@ async def analyze_room(
     moodPreferences: MoodPreferences
 ):
     """
-    Analyze room images using AI to determine room type, style, and recommendations
+    Analyze room images using Gemini AI to determine room type, style, and recommendations
     """
     try:
-        # TODO: Integrate with Claude API for image analysis
-        # For now, return mock analysis
+        # Use first image for analysis
+        if not images or len(images) == 0:
+            raise HTTPException(status_code=400, detail="No images provided")
+        
+        first_image = images[0]
+        image_data = first_image.base64 or first_image.uri
+        
+        # Call Gemini service
+        analysis_data = gemini_service.analyze_room_image(image_data)
+        
+        # Convert to RoomAnalysis model
         analysis = RoomAnalysis(
-            roomType="Living Room",
-            currentStyle="Modern",
-            colorScheme=["white", "gray", "blue"],
-            furniture=["sofa", "coffee table", "tv stand"],
-            improvements=["add plants", "better lighting", "colorful accents"],
-            confidence=0.85
+            roomType=analysis_data.get("roomType", "Unknown"),
+            currentStyle=analysis_data.get("currentStyle", "Modern"),
+            colorScheme=analysis_data.get("colorScheme", []),
+            furniture=analysis_data.get("furniture", []),
+            improvements=analysis_data.get("improvements", []),
+            confidence=analysis_data.get("confidence", 0.8)
         )
+        
         return analysis
+        
     except Exception as e:
+        print(f"Analysis error: {e}")
         raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
 
 # Product Recommendations
 @app.post("/recommendations", response_model=List[ProductRecommendation])
-async def get_recommendations(
-    analysis: RoomAnalysis,
-    budget: str,
-    style: List[str]
-):
+async def get_recommendations(request: RecommendationRequest):
     """
-    Get product recommendations based on room analysis
+    Get product recommendations based on room analysis using ProductService
     """
     try:
-        # TODO: Integrate with Chroma vector database and product APIs
-        # For now, return mock recommendations
-        recommendations = [
-            ProductRecommendation(
-                id="1",
-                name="Modern Sectional Sofa",
-                brand="IKEA",
-                price=899.99,
-                imageUrl="https://example.com/sofa.jpg",
-                productUrl="https://ikea.com/sofa",
-                category="Furniture",
-                style="Modern",
-                colors=["gray", "white"],
-                matchScore=0.92,
-                description="Perfect modern sectional for your living room"
-            ),
-            ProductRecommendation(
-                id="2",
-                name="Glass Coffee Table",
-                brand="Target",
-                price=299.99,
-                imageUrl="https://example.com/table.jpg",
-                productUrl="https://target.com/table",
-                category="Furniture",
-                style="Modern",
-                colors=["clear", "white"],
-                matchScore=0.88,
-                description="Sleek glass coffee table to complement your space"
+        # Get matched products using ProductService
+        matched_products = product_service.match_products(
+            room_type=request.analysis.roomType,
+            style_preferences=request.style,
+            color_preferences=request.analysis.colorScheme,
+            budget=request.budget,
+            furniture_preferences=request.furniture_preferences,
+            additional_info=request.additional_info,
+            limit=10
+        )
+        
+        # Convert to ProductRecommendation models
+        recommendations = []
+        for product in matched_products:
+            recommendation = ProductRecommendation(
+                id=product['id'],
+                name=product['name'],
+                brand=product['brand'],
+                price=product['price'],
+                currency=product['currency'],
+                imageUrl=product['imageUrl'],
+                productUrl=product['productUrl'],
+                category=product['category'],
+                style=', '.join(product.get('style', [])),
+                colors=product['colors'],
+                dimensions=product.get('dimensions'),
+                matchScore=product['matchScore'],
+                description=product['description']
             )
-        ]
+            recommendations.append(recommendation)
+        
         return recommendations
+        
     except Exception as e:
+        print(f"Recommendation error: {e}")
         raise HTTPException(status_code=500, detail=f"Recommendations failed: {str(e)}")
 
 # Design Projects CRUD

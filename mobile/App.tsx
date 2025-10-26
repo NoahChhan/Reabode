@@ -6,16 +6,23 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createStackNavigator } from "@react-navigation/stack";
+import { Provider as PaperProvider } from "react-native-paper";
+import { StatusBar } from "expo-status-bar";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 // Screens
-import HomeScreen from './src/screens/HomeScreen';
-import CameraScreen from './src/screens/CameraScreen';
-import RecommendationsScreen from './src/screens/RecommendationsScreen';
-import ProfileScreen from './src/screens/ProfileScreen';
-import RoomAnalysisScreen from './src/screens/RoomAnalysisScreen';
+import HomeScreen from "./src/screens/HomeScreen";
+import CameraScreen from "./src/screens/CameraScreen";
+import RecommendationsScreen from "./src/screens/RecommendationsScreen";
+import ProfileScreen from "./src/screens/ProfileScreen";
+import RoomAnalysisScreen from "./src/screens/RoomAnalysisScreen";
 
 // Theme
-import { theme } from './src/theme/theme';
+import { theme } from "./src/theme/theme";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -106,4 +113,3 @@ export default function App() {
     </PaperProvider>
   );
 }
-

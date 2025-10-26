@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -13,7 +13,7 @@ import * as Haptics from 'expo-haptics';
 import { useNavigation } from '@react-navigation/native';
 import { RoomImage } from '../types';
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
 export default function CameraScreen() {
   const navigation = useNavigation();
@@ -29,7 +29,7 @@ export default function CameraScreen() {
 
   const getCameraPermissions = async () => {
     const { status } = await Camera.requestCameraPermissionsAsync();
-    setHasPermission(status === 'granted');
+    setHasPermission(status === "granted");
   };
 
   const takePicture = async () => {
@@ -51,10 +51,10 @@ export default function CameraScreen() {
         timestamp: Date.now(),
       };
 
-      setCapturedImages(prev => [...prev, newImage]);
+      setCapturedImages((prev) => [...prev, newImage]);
     } catch (error) {
-      console.error('Error taking picture:', error);
-      Alert.alert('Error', 'Failed to take picture');
+      console.error("Error taking picture:", error);
+      Alert.alert("Error", "Failed to take picture");
     } finally {
       setIsCapturing(false);
     }
@@ -62,8 +62,11 @@ export default function CameraScreen() {
 
   const pickImageFromGallery = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert('Permission needed', 'Please grant access to your photo library');
+    if (status !== "granted") {
+      Alert.alert(
+        "Permission needed",
+        "Please grant access to your photo library"
+      );
       return;
     }
 
@@ -83,17 +86,17 @@ export default function CameraScreen() {
         timestamp: Date.now(),
       };
 
-      setCapturedImages(prev => [...prev, newImage]);
+      setCapturedImages((prev) => [...prev, newImage]);
     }
   };
 
   const removeImage = (imageId: string) => {
-    setCapturedImages(prev => prev.filter(img => img.id !== imageId));
+    setCapturedImages((prev) => prev.filter((img) => img.id !== imageId));
   };
 
   const proceedToAnalysis = () => {
     if (capturedImages.length === 0) {
-      Alert.alert('No Images', 'Please capture at least one room image');
+      Alert.alert("No Images", "Please capture at least one room image");
       return;
     }
 
@@ -157,7 +160,10 @@ export default function CameraScreen() {
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.captureButton, isCapturing && styles.capturingButton]}
+              style={[
+                styles.captureButton,
+                isCapturing && styles.capturingButton,
+              ]}
               onPress={takePicture}
               disabled={isCapturing}
             >
@@ -204,64 +210,64 @@ export default function CameraScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: "black",
   },
   camera: {
     flex: 1,
   },
   cameraOverlay: {
     flex: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingTop: 50,
     paddingHorizontal: 20,
   },
   headerTitle: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
   },
   controls: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 50,
     left: 0,
     right: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingHorizontal: 40,
   },
   galleryButton: {
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: "rgba(0,0,0,0.5)",
     borderRadius: 25,
   },
   captureButton: {
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
     borderWidth: 4,
-    borderColor: 'rgba(255,255,255,0.3)',
+    borderColor: "rgba(255,255,255,0.3)",
   },
   capturingButton: {
-    backgroundColor: 'rgba(255,255,255,0.5)',
+    backgroundColor: "rgba(255,255,255,0.5)",
   },
   captureButtonInner: {
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
   placeholder: {
     width: 50,
   },
   previewContainer: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
@@ -271,12 +277,12 @@ const styles = StyleSheet.create({
   },
   previewTitle: {
     marginBottom: 16,
-    textAlign: 'center',
+    textAlign: "center",
   },
   imageGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
     marginBottom: 20,
   },
   imageItem: {
@@ -284,18 +290,17 @@ const styles = StyleSheet.create({
     height: 60,
     margin: 4,
     borderRadius: 8,
-    backgroundColor: '#e0e7ff',
-    position: 'relative',
+    backgroundColor: "#e0e7ff",
+    position: "relative",
   },
   removeButton: {
-    position: 'absolute',
+    position: "absolute",
     top: -8,
     right: -8,
-    backgroundColor: '#ef4444',
+    backgroundColor: "#ef4444",
     borderRadius: 12,
   },
   analyzeButton: {
     marginTop: 10,
   },
 });
-
