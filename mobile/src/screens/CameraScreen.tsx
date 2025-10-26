@@ -5,23 +5,23 @@ import {
   TouchableOpacity,
   Alert,
   Dimensions,
-} from "react-native";
-import { Camera, CameraType } from "expo-camera";
-import { Text, Button, Surface, IconButton } from "react-native-paper";
-import * as ImagePicker from "expo-image-picker";
-import * as Haptics from "expo-haptics";
-import { useNavigation } from "@react-navigation/native";
-import { RoomImage } from "../types";
+} from 'react-native';
+import { CameraView, Camera } from 'expo-camera';
+import { Text, Button, Surface, IconButton } from 'react-native-paper';
+import * as ImagePicker from 'expo-image-picker';
+import * as Haptics from 'expo-haptics';
+import { useNavigation } from '@react-navigation/native';
+import { RoomImage } from '../types';
 
 const { width, height } = Dimensions.get("window");
 
 export default function CameraScreen() {
   const navigation = useNavigation();
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [cameraType, setCameraType] = useState(CameraType.back);
+  const [cameraType, setCameraType] = useState<"back" | "front">("back");
   const [capturedImages, setCapturedImages] = useState<RoomImage[]>([]);
   const [isCapturing, setIsCapturing] = useState(false);
-  const cameraRef = useRef<Camera>(null);
+  const cameraRef = useRef<any>(null);
 
   useEffect(() => {
     getCameraPermissions();
@@ -82,7 +82,7 @@ export default function CameraScreen() {
       const newImage: RoomImage = {
         id: Date.now().toString(),
         uri: result.assets[0].uri,
-        base64: result.assets[0].base64,
+        base64: result.assets[0].base64 || undefined,
         timestamp: Date.now(),
       };
 
@@ -100,12 +100,9 @@ export default function CameraScreen() {
       return;
     }
 
-    navigation.navigate(
-      "RoomAnalysis" as never,
-      {
-        images: capturedImages,
-      } as never
-    );
+    (navigation.navigate as any)('RoomAnalysis', { 
+      images: capturedImages 
+    });
   };
 
   if (hasPermission === null) {
@@ -127,7 +124,11 @@ export default function CameraScreen() {
 
   return (
     <View style={styles.container}>
-      <Camera style={styles.camera} type={cameraType} ref={cameraRef}>
+      <CameraView
+        style={styles.camera}
+        facing={cameraType}
+        ref={cameraRef}
+      >
         <View style={styles.cameraOverlay}>
           {/* Header */}
           <View style={styles.header}>
@@ -140,15 +141,12 @@ export default function CameraScreen() {
               Scan Your Room
             </Text>
             <IconButton
-              icon="flip-camera-android"
+              icon="flip-camera-ios"
               iconColor="white"
-              onPress={() =>
-                setCameraType(
-                  cameraType === CameraType.back
-                    ? CameraType.front
-                    : CameraType.back
-                )
-              }
+              size={28}
+              onPress={() => setCameraType(
+                cameraType === "back" ? "front" : "back"
+              )}
             />
           </View>
 
@@ -175,7 +173,7 @@ export default function CameraScreen() {
             <View style={styles.placeholder} />
           </View>
         </View>
-      </Camera>
+      </CameraView>
 
       {/* Captured Images Preview */}
       {capturedImages.length > 0 && (
