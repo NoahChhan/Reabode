@@ -22,22 +22,16 @@ import * as Haptics from 'expo-haptics';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { ProductRecommendation, RoomAnalysis } from '../types';
 import { apiService } from '../services/api';
-import { useErrorOverlay } from '../hooks/useErrorOverlay';
 
 const { width } = Dimensions.get('window');
 
 export default function RecommendationsScreen() {
   const navigation = useNavigation();
   const route = useRoute();
-  const { ErrorOverlay, showError } = useErrorOverlay();
-  
-  // Safe parameter extraction with error handling
   const params = route.params as any;
   const analysis = params?.analysis;
   const dimensions = params?.dimensions;
   const moodPreferences = params?.moodPreferences;
-  
-  // Don't show error popup, just handle missing analysis gracefully
 
   const [recommendations, setRecommendations] = useState<ProductRecommendation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -56,37 +50,8 @@ export default function RecommendationsScreen() {
         moodPreferences.style
       );
       setRecommendations(data);
-      console.log('✅ Successfully loaded recommendations from backend:', data);
     } catch (error) {
-      console.log('⚠️ Backend not available, using mock recommendations');
-      setRecommendations([
-        {
-          id: "1",
-          name: "Modern Sectional Sofa",
-          brand: "IKEA",
-          price: 899.99,
-          imageUrl: "https://example.com/sofa.jpg",
-          productUrl: "https://ikea.com/sofa",
-          category: "Furniture",
-          style: "Modern",
-          colors: ["gray", "white"],
-          matchScore: 0.92,
-          description: "Perfect modern sectional for your living room"
-        },
-        {
-          id: "2",
-          name: "Glass Coffee Table",
-          brand: "Target",
-          price: 299.99,
-          imageUrl: "https://example.com/table.jpg",
-          productUrl: "https://target.com/table",
-          category: "Furniture",
-          style: "Modern",
-          colors: ["clear", "white"],
-          matchScore: 0.88,
-          description: "Sleek glass coffee table to complement your space"
-        }
-      ]);
+      console.error('Error loading recommendations:', error);
     } finally {
       setLoading(false);
     }
@@ -123,7 +88,7 @@ export default function RecommendationsScreen() {
     ? recommendations
     : recommendations.filter(rec => rec.category === selectedCategory);
 
-  const formatPrice = (price: number, currency: string = 'USD') => {
+  const formatPrice = (price: number, currency: string) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: currency,
@@ -174,7 +139,8 @@ export default function RecommendationsScreen() {
             <Chip
               mode="outlined"
               compact
-              style={styles.tag}
+              style={[styles.tag, { backgroundColor: '#7FB878' }]}
+              textStyle={{ color: 'white' }}
             >
               {Math.round(product.matchScore * 100)}% match
             </Chip>
@@ -187,14 +153,14 @@ export default function RecommendationsScreen() {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#6366f1', '#8b5cf6']}
+        colors={['#5D8658', '#7FB878']}
         style={styles.header}
       >
         <Text variant="headlineSmall" style={styles.headerTitle}>
           Recommendations
         </Text>
         <Text variant="bodyMedium" style={styles.headerSubtitle}>
-          {analysis ? `${recommendations.length} products found` : 'Take a photo to get started'}
+          {recommendations.length} products found
         </Text>
       </LinearGradient>
 
@@ -266,9 +232,6 @@ export default function RecommendationsScreen() {
         }}
         label="View Cart"
       />
-      
-      {/* Error overlay for this screen */}
-      <ErrorOverlay />
     </View>
   );
 }
@@ -276,7 +239,7 @@ export default function RecommendationsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff8e6',
+    backgroundColor: '#faf4dc',
   },
   header: {
     paddingTop: 50,
@@ -284,11 +247,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   headerTitle: {
-    color: '#5D8658',
+    color: 'white',
     fontWeight: 'bold',
   },
   headerSubtitle: {
-    color: '#5D8658',
+    color: 'white',
     opacity: 0.9,
     marginTop: 4,
   },
@@ -307,6 +270,7 @@ const styles = StyleSheet.create({
   },
   categoryChip: {
     marginRight: 8,
+    backgroundColor: '#E8F0E6',
   },
   loadingContainer: {
     flex: 1,
@@ -323,7 +287,6 @@ const styles = StyleSheet.create({
   emptyTitle: {
     textAlign: 'center',
     marginBottom: 16,
-    color: '#5D8658',
     fontWeight: 'bold',
   },
   emptySubtext: {
@@ -331,7 +294,6 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 24,
     textAlign: 'center',
-    color: '#5D8658',
   },
   cameraButton: {
     marginTop: 16,
@@ -366,17 +328,15 @@ const styles = StyleSheet.create({
   productBrand: {
     opacity: 0.7,
     marginBottom: 4,
-    color: '#5D8658',
   },
   productPrice: {
     fontWeight: 'bold',
-    color: '#10b981',
+    color: '#5D8658',
     marginBottom: 8,
   },
   productDescription: {
     opacity: 0.8,
     marginBottom: 12,
-    color: '#5D8658',
   },
   productTags: {
     flexDirection: 'row',
@@ -385,12 +345,14 @@ const styles = StyleSheet.create({
   tag: {
     marginRight: 4,
     marginBottom: 4,
+    backgroundColor: '#E8F0E6',
   },
   fab: {
     position: 'absolute',
     margin: 16,
     right: 0,
     bottom: 0,
+    backgroundColor: '#5D8658',
   },
 });
 

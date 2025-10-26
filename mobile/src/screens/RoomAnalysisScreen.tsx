@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
-  Alert,
+  ActivityIndicator,
 } from 'react-native';
 import {
   Text,
@@ -45,6 +45,7 @@ export default function RoomAnalysisScreen() {
   });
   const [analysis, setAnalysis] = useState<RoomAnalysis | null>(null);
   const [loading, setLoading] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
 
   const styleOptions = [
@@ -63,12 +64,13 @@ export default function RoomAnalysisScreen() {
   ];
 
   const budgetOptions = [
-    { value: 'low', label: 'Budget ($0-500)', color: '#10b981' },
-    { value: 'medium', label: 'Mid-range ($500-2000)', color: '#f59e0b' },
-    { value: 'high', label: 'Premium ($2000+)', color: '#8b5cf6' },
+    { value: 'low', label: 'Budget ($0-500)', color: '#7FB878' },
+    { value: 'medium', label: 'Mid-range ($500-2000)', color: '#5D8658' },
+    { value: 'high', label: 'Premium ($2000+)', color: '#4A6B45' },
   ];
 
   const handleAnalyze = async () => {
+    setIsAnalyzing(true);
     setLoading(true);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
@@ -80,30 +82,23 @@ export default function RoomAnalysisScreen() {
       );
       setAnalysis(analysisResult);
       setCurrentStep(3);
-      console.log('✅ Successfully analyzed room with backend:', analysisResult);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } catch (error) {
-      console.log('⚠️ Backend not available, using mock analysis data');
-      setAnalysis({
-        roomType: "Living Room",
-        currentStyle: "Modern",
-        colorScheme: ["#fff8e6", "gray", "blue"],
-        furniture: ["sofa", "coffee table"],
-        improvements: ["add plants", "better lighting"],
-        confidence: 0.85
-      });
-      setCurrentStep(3);
+      console.error('Analysis failed:', error);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
     } finally {
       setLoading(false);
+      setIsAnalyzing(false);
     }
   };
 
   const handleContinue = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    navigation.navigate('Recommendations' as never, { 
+    (navigation.navigate as any)('Recommendations', { 
       analysis, 
       dimensions, 
       moodPreferences 
-    } as never);
+    });
   };
 
   const toggleStyle = (style: string) => {
@@ -147,7 +142,8 @@ export default function RoomAnalysisScreen() {
             
             <View style={styles.dimensionsContainer}>
               <TextInput
-                label="Length"
+                label="Length (inches)"
+                placeholder="Length (inches)"
                 value={dimensions.length.toString()}
                 onChangeText={(text) => setDimensions(prev => ({
                   ...prev,
@@ -157,7 +153,8 @@ export default function RoomAnalysisScreen() {
                 style={styles.input}
               />
               <TextInput
-                label="Width"
+                label="Width (inches)"
+                placeholder="Width (inches)"
                 value={dimensions.width.toString()}
                 onChangeText={(text) => setDimensions(prev => ({
                   ...prev,
@@ -167,7 +164,8 @@ export default function RoomAnalysisScreen() {
                 style={styles.input}
               />
               <TextInput
-                label="Height"
+                label="Height (inches)"
+                placeholder="Height (inches)"
                 value={dimensions.height.toString()}
                 onChangeText={(text) => setDimensions(prev => ({
                   ...prev,
@@ -176,6 +174,9 @@ export default function RoomAnalysisScreen() {
                 keyboardType="numeric"
                 style={styles.input}
               />
+              <Text style={styles.helperText}>
+                Enter room dimensions in inches for best accuracy
+              </Text>
             </View>
 
             <Button
@@ -291,23 +292,86 @@ export default function RoomAnalysisScreen() {
         return (
           <View style={styles.stepContainer}>
             <Text variant="headlineSmall" style={styles.stepTitle}>
-              Analysis Complete!
+              ✨ Analysis Complete!
             </Text>
             
             {analysis && (
-              <Card style={styles.analysisCard}>
+              <Card style={styles.analysisCard} elevation={3}>
                 <Card.Content>
-                  <Text variant="titleMedium">Room Type: {analysis.roomType}</Text>
-                  <Text variant="bodyMedium">Style: {analysis.currentStyle}</Text>
-                  <Text variant="bodyMedium">
-                    Colors: {analysis.colorScheme.join(', ')}
-                  </Text>
-                  <Text variant="bodyMedium">
-                    Furniture: {analysis.furniture.join(', ')}
-                  </Text>
-                  <Text variant="bodyMedium">
-                    Confidence: {Math.round(analysis.confidence * 100)}%
-                  </Text>
+                  {/* Room Type */}
+                  <View style={styles.analysisRow}>
+                    <Text variant="titleMedium">🏠 Room Type</Text>
+                    <Text variant="bodyLarge" style={{ marginTop: 4 }}>
+                      {analysis.roomType}
+                    </Text>
+                  </View>
+
+                  <Divider style={styles.divider} />
+
+                  {/* Current Style */}
+                  <View style={styles.analysisRow}>
+                    <Text variant="titleMedium">🎨 Current Style</Text>
+                    <Text variant="bodyLarge" style={{ marginTop: 4 }}>
+                      {analysis.currentStyle}
+                    </Text>
+                  </View>
+
+                  <Divider style={styles.divider} />
+
+                  {/* Color Scheme */}
+                  <View style={styles.analysisSection}>
+                    <Text variant="titleMedium">🎨 Color Scheme</Text>
+                    <View style={styles.colorChips}>
+                      {analysis.colorScheme.map((color, index) => (
+                        <Chip key={index} style={styles.colorChip}>
+                          {color}
+                        </Chip>
+                      ))}
+                    </View>
+                  </View>
+
+                  <Divider style={styles.divider} />
+
+                  {/* Existing Furniture */}
+                  <View style={styles.analysisSection}>
+                    <Text variant="titleMedium">🪑 Existing Furniture</Text>
+                    <View style={styles.furnitureList}>
+                      {analysis.furniture.map((item, index) => (
+                        <Chip key={index} style={styles.furnitureChip}>
+                          {item}
+                        </Chip>
+                      ))}
+                    </View>
+                  </View>
+
+                  {/* Suggestions */}
+                  {analysis.improvements && analysis.improvements.length > 0 && (
+                    <>
+                      <Divider style={styles.divider} />
+                      <View style={styles.analysisSection}>
+                        <Text variant="titleMedium">💡 Suggestions</Text>
+                        {analysis.improvements.map((improvement, index) => (
+                          <Text key={index} variant="bodyMedium" style={styles.improvement}>
+                            • {improvement}
+                          </Text>
+                        ))}
+                      </View>
+                    </>
+                  )}
+
+                  {/* Confidence Score */}
+                  <Divider style={styles.divider} />
+                  <View style={styles.confidenceSection}>
+                    <Text variant="titleMedium">Confidence Score</Text>
+                    <ProgressBar
+                      progress={analysis.confidence}
+                      color="#7FB878"
+                      style={styles.confidenceProgressBar}
+                    />
+                    <Text variant="bodyLarge" style={{ fontWeight: 'bold' }}>
+                      {Math.round(analysis.confidence * 100)}%
+                    </Text>
+                  </View>
                 </Card.Content>
               </Card>
             )}
@@ -331,7 +395,7 @@ export default function RoomAnalysisScreen() {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#6366f1', '#8b5cf6']}
+        colors={['#5D8658', '#7FB878']}
         style={styles.header}
       >
         <View style={styles.headerContent}>
@@ -353,6 +417,19 @@ export default function RoomAnalysisScreen() {
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {renderStep()}
       </ScrollView>
+
+      {isAnalyzing && (
+        <View style={styles.loadingOverlay}>
+          <LinearGradient
+            colors={['#5D8658', '#7FB878']}
+            style={styles.loadingGradient}
+          >
+            <ActivityIndicator size="large" color="white" />
+            <Text style={styles.loadingText}>AI is analyzing your space...</Text>
+            <Text style={styles.loadingSubtext}>This may take a few seconds</Text>
+          </LinearGradient>
+        </View>
+      )}
     </View>
   );
 }
@@ -360,7 +437,7 @@ export default function RoomAnalysisScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff8e6',
+    backgroundColor: '#faf4dc',
   },
   header: {
     paddingTop: 50,
@@ -374,12 +451,12 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   backButton: {
-    color: '#5D8658',
+    color: 'white',
     fontSize: 16,
     fontWeight: '600',
   },
   headerTitle: {
-    color: '#5D8658',
+    color: 'white',
     fontWeight: 'bold',
   },
   placeholder: {
@@ -400,19 +477,25 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 8,
     fontWeight: 'bold',
-    color: '#5D8658',
+    color: '#2A3B28',
   },
   stepDescription: {
     textAlign: 'center',
     marginBottom: 30,
     opacity: 0.7,
-    color: '#5D8658',
   },
   dimensionsContainer: {
     marginBottom: 30,
   },
   input: {
     marginBottom: 16,
+  },
+  helperText: {
+    fontSize: 12,
+    opacity: 0.6,
+    color: '#64748b',
+    textAlign: 'center',
+    marginTop: 8,
   },
   chipsContainer: {
     flexDirection: 'row',
@@ -422,12 +505,13 @@ const styles = StyleSheet.create({
   chip: {
     marginRight: 8,
     marginBottom: 8,
+    backgroundColor: '#E8F0E6',
   },
   sectionTitle: {
     marginTop: 20,
     marginBottom: 12,
     fontWeight: '600',
-    color: '#5D8658',
+    color: '#2A3B28',
   },
   budgetContainer: {
     marginBottom: 30,
@@ -442,10 +526,82 @@ const styles = StyleSheet.create({
   },
   analyzeButton: {
     marginTop: 20,
-    backgroundColor: '#10b981',
+    backgroundColor: '#5D8658',
   },
   analysisCard: {
     marginBottom: 30,
+    borderWidth: 1,
+    borderColor: '#E8F0E6',
+  },
+  analysisRow: {
+    marginBottom: 12,
+  },
+  analysisSection: {
+    marginBottom: 12,
+  },
+  colorChips: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 8,
+  },
+  colorChip: {
+    marginRight: 8,
+    marginBottom: 8,
+    backgroundColor: '#E8F0E6',
+  },
+  furnitureList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 8,
+  },
+  furnitureChip: {
+    marginRight: 8,
+    marginBottom: 8,
+    backgroundColor: '#E8F0E6',
+  },
+  improvement: {
+    marginTop: 4,
+    marginLeft: 8,
+  },
+  divider: {
+    marginVertical: 12,
+  },
+  confidenceSection: {
+    marginTop: 16,
+    alignItems: 'center',
+  },
+  confidenceProgressBar: {
+    width: '100%',
+    height: 8,
+    marginVertical: 8,
+    borderRadius: 4,
+  },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 1000,
+  },
+  loadingGradient: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 20,
+    textAlign: 'center',
+  },
+  loadingSubtext: {
+    color: 'white',
+    fontSize: 14,
+    marginTop: 8,
+    opacity: 0.8,
+    textAlign: 'center',
   },
 });
 

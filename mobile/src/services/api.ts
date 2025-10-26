@@ -73,14 +73,22 @@ class ApiService {
     dimensions: RoomDimensions,
     moodPreferences: MoodPreferences
   ): Promise<RoomAnalysis> {
-    return this.request<RoomAnalysis>('/analyze-room', {
-      method: 'POST',
-      body: JSON.stringify({
-        images,
-        dimensions,
-        moodPreferences,
-      }),
-    });
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Return mock data
+    return {
+      roomType: 'Bedroom',
+      currentStyle: 'Modern Minimalist',
+      colorScheme: ['White', 'Gray', 'Wood Tones'],
+      furniture: ['Bed', 'Nightstand', 'Dresser'],
+      improvements: [
+        'Add ambient lighting for a warmer feel',
+        'Consider a statement piece like an accent chair',
+        'Add plants for a touch of nature'
+      ],
+      confidence: 0.87
+    };
   }
 
   // Product Recommendations

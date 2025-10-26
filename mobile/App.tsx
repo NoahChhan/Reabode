@@ -1,3 +1,11 @@
+import React from 'react';
+import { ActivityIndicator, View, Image } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
+import { Provider as PaperProvider } from 'react-native-paper';
+import { StatusBar } from 'expo-status-bar';
+import { useFonts } from 'expo-font';
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -7,12 +15,12 @@ import { StatusBar } from "expo-status-bar";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 // Screens
-import HomeScreen from './src/screens/HomeScreen';
-import CameraScreen from './src/screens/CameraScreen';
-import RecommendationsScreen from './src/screens/RecommendationsScreen';
-import ProfileScreen from './src/screens/ProfileScreen';
-import RoomAnalysisScreen from './src/screens/RoomAnalysisScreen';
-import TestErrorScreen from './src/screens/TestErrorScreen';
+import HomeScreen from "./src/screens/HomeScreen";
+import CameraScreen from "./src/screens/CameraScreen";
+import RecommendationsScreen from "./src/screens/RecommendationsScreen";
+import ProfileScreen from "./src/screens/ProfileScreen";
+import RoomAnalysisScreen from "./src/screens/RoomAnalysisScreen";
+import TestErrorScreen from "./src/screens/TestErrorScreen";
 
 // Theme
 import { theme } from "./src/theme/theme";
@@ -25,38 +33,44 @@ function TabNavigator() {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
-          let iconName: string;
+          let iconSource;
 
-          if (route.name === "Home") {
-            iconName = "home";
-          } else if (route.name === "Camera") {
-            iconName = "camera-alt";
-          } else if (route.name === "Recommendations") {
-            iconName = "shopping-bag";
-          } else if (route.name === "Profile") {
-            iconName = "person";
+          if (route.name === 'Home') {
+            iconSource = require('./assets/icons/House.png');
+          } else if (route.name === 'Camera') {
+            iconSource = require('./assets/icons/camera.png');
+          } else if (route.name === 'Recommendations') {
+            iconSource = require('./assets/icons/recommendations.png');
+          } else if (route.name === 'Profile') {
+            iconSource = require('./assets/icons/profile.png');
           } else {
-            iconName = "help";
+            iconSource = require('./assets/icons/House.png');
           }
 
-          // TODO: Replace with custom PNG icons when available from frontend engineer
-          // let iconSource = require(`./assets/icons/${iconName}.png`);
-          // return <Image source={iconSource} style={{ width: 36, height: 36 }} resizeMode="contain" />;
-          
-          return <Icon name={iconName} size={size} color={color} />;
+          return (
+            <Image 
+              source={iconSource} 
+              style={{ 
+                width: 36, 
+                height: 36,
+              }} 
+              resizeMode="contain"
+            />
+          );
         },
-        tabBarActiveTintColor: "#5D8658",
-        tabBarInactiveTintColor: "#6B7280",
+        tabBarActiveTintColor: '#5D8658',
+        tabBarInactiveTintColor: '#6B7280',
         tabBarStyle: {
-          backgroundColor: "#ffffff",
+          backgroundColor: '#ffffff',
           borderTopWidth: 1,
-          borderTopColor: "#E5E7EB",
+          borderTopColor: '#E5E7EB',
           height: 88,
           paddingBottom: 20,
           paddingTop: 8,
         },
         tabBarLabelStyle: {
           fontSize: 13,
+          fontFamily: 'Poppins-Regular',
           marginTop: 4,
           marginBottom: 4,
         },
@@ -72,6 +86,22 @@ function TabNavigator() {
 }
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    'Poppins-Light': require('./assets/fonts/poppins/Poppins-Light.ttf'),
+    'Poppins-Regular': require('./assets/fonts/poppins/Poppins-Regular.ttf'),
+    'Poppins-Medium': require('./assets/fonts/poppins/Poppins-Medium.ttf'),
+    'Poppins-SemiBold': require('./assets/fonts/poppins/Poppins-SemiBold.ttf'),
+    'Poppins-Bold': require('./assets/fonts/poppins/Poppins-Bold.ttf'),
+  });
+
+  if (!fontsLoaded) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#5D8658" />
+      </View>
+    );
+  }
+
   return (
     <PaperProvider theme={theme}>
       <NavigationContainer>
@@ -80,8 +110,8 @@ export default function App() {
           <Stack.Screen name="RoomAnalysis" component={RoomAnalysisScreen} />
           <Stack.Screen name="TestError" component={TestErrorScreen} />
         </Stack.Navigator>
-        <StatusBar style="auto" />
       </NavigationContainer>
+      <StatusBar style="auto" />
     </PaperProvider>
   );
 }

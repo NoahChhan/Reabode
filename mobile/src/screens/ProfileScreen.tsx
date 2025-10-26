@@ -9,15 +9,12 @@ import {
   Divider,
 } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
 
 export default function ProfileScreen() {
-  const navigation = useNavigation();
-
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#6366f1', '#8b5cf6']}
+        colors={['#5D8658', '#7FB878']}
         style={styles.header}
       >
         <Text variant="headlineSmall" style={styles.headerTitle}>
@@ -36,6 +33,12 @@ export default function ProfileScreen() {
               title="Notifications"
               description="Get notified about new recommendations"
               right={() => <Switch value={true} />}
+            />
+            
+            <List.Item
+              title="Dark Mode"
+              description="Use dark theme"
+              right={() => <Switch value={false} />}
             />
             
             <List.Item
@@ -66,12 +69,6 @@ export default function ProfileScreen() {
               title="Terms of Service"
               onPress={() => {}}
             />
-            
-            <List.Item
-              title="Test Error Handling"
-              description="Test the app's error handling system"
-              onPress={() => navigation.navigate('TestError' as never)}
-            />
           </Card.Content>
         </Card>
 
@@ -90,7 +87,7 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff8e6',
+    backgroundColor: '#faf4dc',
   },
   header: {
     paddingTop: 50,
@@ -98,7 +95,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   headerTitle: {
-    color: '#5D8658',
+    color: 'white',
     fontWeight: 'bold',
   },
   content: {
@@ -112,7 +109,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     marginBottom: 16,
     fontWeight: '600',
-    color: '#5D8658',
+    color: '#2A3B28',
   },
   logoutButton: {
     marginTop: 30,
