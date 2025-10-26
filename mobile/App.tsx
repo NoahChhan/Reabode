@@ -39,10 +39,27 @@ function TabNavigator() {
             iconName = "help";
           }
 
+          // TODO: Replace with custom PNG icons when available from frontend engineer
+          // let iconSource = require(`./assets/icons/${iconName}.png`);
+          // return <Image source={iconSource} style={{ width: 36, height: 36 }} resizeMode="contain" />;
+          
           return <Icon name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: theme.colors.primary,
-        tabBarInactiveTintColor: "gray",
+        tabBarActiveTintColor: "#5D8658",
+        tabBarInactiveTintColor: "#6B7280",
+        tabBarStyle: {
+          backgroundColor: "#ffffff",
+          borderTopWidth: 1,
+          borderTopColor: "#E5E7EB",
+          height: 88,
+          paddingBottom: 20,
+          paddingTop: 8,
+        },
+        tabBarLabelStyle: {
+          fontSize: 13,
+          marginTop: 4,
+          marginBottom: 4,
+        },
         headerShown: false,
       })}
     >
