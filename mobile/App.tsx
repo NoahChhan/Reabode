@@ -73,9 +73,9 @@ function TabNavigator() {
         tabBarActiveTintColor: '#5D8658',
         tabBarInactiveTintColor: '#6B7280',
         tabBarStyle: {
-          backgroundColor: '#ffffff',
+          backgroundColor: '#fff8e6',
           borderTopWidth: 1,
-          borderTopColor: '#E5E7EB',
+          borderTopColor: '#f0e6c8',
           height: 88,
           paddingBottom: 20,
           paddingTop: 8,

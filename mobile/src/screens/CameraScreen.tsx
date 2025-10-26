@@ -152,12 +152,13 @@ export default function CameraScreen() {
               Scan Your Room
             </Text>
             <IconButton
-              icon="flip-camera-ios"
+              icon="camera-flip"
               iconColor="white"
               size={28}
-              onPress={() => setCameraType(
-                cameraType === "back" ? "front" : "back"
-              )}
+              onPress={() => {
+                setCameraType(cameraType === "back" ? "front" : "back");
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }}
             />
           </View>
 
