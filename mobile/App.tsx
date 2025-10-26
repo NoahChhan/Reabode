@@ -60,20 +60,18 @@ function TabNavigator() {
 
 export default function App() {
   return (
-    <ErrorBoundary>
-      <PaperProvider theme={theme}>
-        <ErrorProvider>
-          <NavigationContainer>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="Main" component={TabNavigator} />
-              <Stack.Screen name="RoomAnalysis" component={RoomAnalysisScreen} />
-              <Stack.Screen name="TestError" component={TestErrorScreen} />
-            </Stack.Navigator>
-          </NavigationContainer>
-          <StatusBar style="auto" />
-        </ErrorProvider>
-      </PaperProvider>
-    </ErrorBoundary>
+    <PaperProvider theme={theme}>
+      <ErrorProvider>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Main" component={TabNavigator} />
+            <Stack.Screen name="RoomAnalysis" component={RoomAnalysisScreen} />
+            <Stack.Screen name="TestError" component={TestErrorScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+        <StatusBar style="auto" />
+      </ErrorProvider>
+    </PaperProvider>
   );
 }
 

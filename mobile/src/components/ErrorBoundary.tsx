@@ -27,8 +27,13 @@ export class ErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: any) {
     console.error('ErrorBoundary caught an error:', error, errorInfo);
     
-    // Trigger haptic feedback for error
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+    // Only show error boundary for serious errors, not minor ones
+    if (error.message.includes('Network request failed') || 
+        error.message.includes('Cannot resolve hostname') ||
+        error.message.includes('TypeError')) {
+      // Trigger haptic feedback for error
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+    }
     
     // Call custom error handler if provided
     if (this.props.onError) {

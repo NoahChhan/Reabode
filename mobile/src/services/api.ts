@@ -48,13 +48,17 @@ class ApiService {
     } catch (error) {
       console.error('API request failed:', error);
       
-      // Show user-friendly error popup
+      // Only show popup for certain types of errors, not all
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
-      Alert.alert(
-        'Connection Error',
-        errorMessage,
-        [{ text: 'OK', style: 'default' }]
-      );
+      
+      // Only show alert for connection issues, not for all errors
+      if (errorMessage.includes('Cannot connect') || errorMessage.includes('Service not found')) {
+        Alert.alert(
+          'Connection Error',
+          errorMessage,
+          [{ text: 'OK', style: 'default' }]
+        );
+      }
       
       throw error;
     }

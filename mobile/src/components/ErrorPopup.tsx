@@ -23,8 +23,16 @@ export const ErrorPopup: React.FC<ErrorPopupProps> = ({
     if (visible) {
       // Trigger error haptic feedback
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      
+      // Auto-dismiss after 5 seconds to prevent stuck popups
+      const timer = setTimeout(() => {
+        console.log('Auto-dismissing error popup');
+        onDismiss();
+      }, 5000);
+      
+      return () => clearTimeout(timer);
     }
-  }, [visible]);
+  }, [visible, onDismiss]);
 
   const handleDismiss = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);

@@ -27,6 +27,7 @@ export const ErrorProvider: React.FC<ErrorProviderProps> = ({ children }) => {
   const navigation = useNavigation();
 
   const showError = (title = 'Error', message = 'Something went wrong. Please try again.') => {
+    console.log('Showing error:', title, message);
     setError({
       visible: true,
       title,
@@ -35,12 +36,17 @@ export const ErrorProvider: React.FC<ErrorProviderProps> = ({ children }) => {
   };
 
   const hideError = () => {
+    console.log('Hiding error');
     setError(prev => ({ ...prev, visible: false }));
   };
 
   const goHome = () => {
-    // Navigate to home screen
-    navigation.navigate('Main' as never);
+    console.log('Navigating to home');
+    try {
+      navigation.navigate('Main' as never);
+    } catch (navError) {
+      console.error('Navigation error:', navError);
+    }
   };
 
   return (
