@@ -34,9 +34,9 @@ class ProductService:
         additional_info = additional_info or []
 
         budget_ranges = {
-            "low": (0, 200),
-            "medium": (200, 800),
-            "high": (800, 10000)
+            "low": (0, 100),
+            "medium": (100, 300),
+            "high": (300, 10000)
         }
         min_price, max_price = budget_ranges.get(budget, (0, 10000))
 
@@ -65,22 +65,41 @@ class ProductService:
             # --- ROOM TYPE RELEVANCE (20%) ---
             category = product.get('category', '').lower()
             subcategory = product.get('subcategory', '').lower()
-            room_categories = {
-                "living room": ["sofas", "chairs", "coffee tables", "lighting", "storage"],
-                "bedroom": ["beds", "dressers", "lighting", "storage"],
-                "kitchen": ["tables", "chairs", "storage"],
-                "office": ["desks", "chairs", "storage", "lighting"]
-            }
-            relevant_categories = room_categories.get(room_type.lower(), [])
-            if any(cat in subcategory or cat in category for cat in relevant_categories):
+            room_types = [rt.lower() for rt in product.get('roomTypes', [])]
+            
+            # Check if product is suitable for this room type
+            if room_type.lower() in room_types:
                 score += 0.2
+            else:
+                # Fallback to category matching
+                room_categories = {
+                    "living room": ["sofas", "chairs", "coffee tables", "lighting", "storage", "floor lamps", "bookcases"],
+                    "bedroom": ["beds", "dressers", "lighting", "storage", "floor lamps", "bookcases"],
+                    "kitchen": ["tables", "chairs", "storage", "bookcases"],
+                    "office": ["desks", "chairs", "storage", "lighting", "floor lamps", "bookcases"]
+                }
+                relevant_categories = room_categories.get(room_type.lower(), [])
+                if any(cat in subcategory or cat in category for cat in relevant_categories):
+                    score += 0.2
 
             # --- FURNITURE PREFERENCES (20%) ---
             if furniture_preferences:
-                furniture_matches = sum(
-                    1 for f in furniture_preferences
-                    if f.lower() in subcategory or f.lower() in category
-                )
+                furniture_matches = 0
+                for f in furniture_preferences:
+                    f_lower = f.lower()
+                    # Check subcategory, category, and name
+                    if (f_lower in subcategory or 
+                        f_lower in category or 
+                        f_lower in product['name'].lower()):
+                        furniture_matches += 1
+                    # Special mappings
+                    elif f_lower == 'sofa' and 'chair' in subcategory:
+                        furniture_matches += 1
+                    elif f_lower == 'lamp' and 'lighting' in category:
+                        furniture_matches += 1
+                    elif f_lower == 'shelf' and 'storage' in category:
+                        furniture_matches += 1
+                
                 if furniture_matches > 0:
                     score += 0.2
 

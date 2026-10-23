@@ -13,7 +13,7 @@ from pathlib import Path
 backend_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(backend_dir))
 
-from services.ikea_scraper import ikea_scraper_service
+from services.product_service import product_service
 from services.match_utils import product_matcher
 
 router = APIRouter()
@@ -66,18 +66,23 @@ async def recommend_products(request: GeminiAnalysisRequest):
             "improvement_suggestions": request.improvement_suggestions
         }
         
-        # Generate search terms from Gemini analysis
-        search_terms = ikea_scraper_service.generate_search_terms(gemini_data)
+        # Generate search terms from Gemini analysis for logging/debugging
+        search_terms = [
+            f"{gemini_data.get('room_type', '')} furniture",
+            f"{gemini_data.get('style', '')} furniture"
+        ] + gemini_data.get('furniture_identified', [])
+        search_terms = [term for term in search_terms if term.strip()]
         
-        if not search_terms:
-            return RecommendationResponse(
-                recommendations=[],
-                total_found=0,
-                search_keywords=[]
-            )
-        
-        # Search and fetch real IKEA products (minimal for fast response)
-        products = ikea_scraper_service.search_and_fetch_products(search_terms, limit_per_term=1)
+        # Get products from hardcoded data using ProductService
+        products = product_service.match_products(
+            room_type=gemini_data.get('room_type', 'living room'),
+            style_preferences=[gemini_data.get('style', 'modern')],
+            color_preferences=gemini_data.get('color_scheme', []),
+            budget='medium',  # Default to medium budget
+            furniture_preferences=gemini_data.get('furniture_identified', []),
+            additional_info=gemini_data.get('improvement_suggestions', []),
+            limit=15
+        )
         
         if not products:
             return RecommendationResponse(
@@ -86,22 +91,20 @@ async def recommend_products(request: GeminiAnalysisRequest):
                 search_keywords=search_terms
             )
         
-        # Score and rank products
-        scored_products = []
-        for product in products:
-            score, match_type = product_matcher.calculate_match_score(product, gemini_data)
-            if score > 0:  # Only include products with some match
-                scored_products.append({
-                    "product": product,
-                    "score": score,
-                    "match_type": match_type
-                })
+        # Products are already scored and sorted by ProductService
+        # Filter out products with no match score
+        scored_products = [
+            {
+                "product": product,
+                "score": product.get('matchScore', 0),
+                "match_type": "style_match" if product.get('matchScore', 0) > 0.5 else "category_match"
+            }
+            for product in products
+            if product.get('matchScore', 0) > 0
+        ]
         
-        # Sort by score (highest first)
-        scored_products.sort(key=lambda x: x["score"], reverse=True)
-        
-        # Take top 15 recommendations
-        top_products = scored_products[:15]
+        # Take top recommendations (already sorted by ProductService)
+        top_products = scored_products
         
         # Format recommendations
         recommendations = []
@@ -110,18 +113,28 @@ async def recommend_products(request: GeminiAnalysisRequest):
             match_type = item["match_type"]
             score = item["score"]
             
-            # Categorize the product
-            category = product_matcher.categorize_product(product)
+            # Use product category from hardcoded data
+            category = product.get("category", "Furniture")
             
-            # Format dimensions
+            # Format dimensions from hardcoded data
             dimensions = []
             if product.get("dimensions"):
-                for dim in product["dimensions"]:
-                    dimensions.append({
-                        "type": dim.get("type", ""),
-                        "value": dim.get("value", ""),
-                        "unit": dim.get("unit", "")
-                    })
+                dims = product["dimensions"]
+                dimensions.append({
+                    "type": "height",
+                    "value": str(dims.get("height", "")),
+                    "unit": dims.get("unit", "inches")
+                })
+                dimensions.append({
+                    "type": "width", 
+                    "value": str(dims.get("width", "")),
+                    "unit": dims.get("unit", "inches")
+                })
+                dimensions.append({
+                    "type": "depth",
+                    "value": str(dims.get("depth", "")),
+                    "unit": dims.get("unit", "inches")
+                })
             
             recommendation = ProductRecommendation(
                 match_type=match_type,
@@ -130,9 +143,9 @@ async def recommend_products(request: GeminiAnalysisRequest):
                 price=product.get("price"),
                 currency=product.get("currency", "USD"),
                 color=product.get("colors", []),
-                image=product.get("image", ""),
-                url=product.get("url", ""),
-                match_score=score,
+                image=product.get("imageUrl", ""),
+                url=product.get("productUrl", ""),
+                match_score=int(score * 100),  # Convert to integer percentage
                 dimensions=dimensions
             )
             recommendations.append(recommendation)
